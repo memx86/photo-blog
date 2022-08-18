@@ -1,4 +1,4 @@
-import { Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
 
 import RegistrationScreen from "./screens/RegistrationScreen";
@@ -10,7 +10,12 @@ export default function App() {
     "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
   });
 
-  if (!fontsLoaded) return <Text style={s.loader}>Loading Fonts...</Text>;
+  if (!fontsLoaded)
+    return (
+      <View style={s.loader}>
+        <Text>Loading Fonts...</Text>
+      </View>
+    );
 
   return <RegistrationScreen />;
 }
@@ -21,6 +26,8 @@ const s = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#ffffff",
+  },
+  loaderText: {
     color: "#000000",
   },
 });

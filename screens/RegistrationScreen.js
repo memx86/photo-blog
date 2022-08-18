@@ -1,49 +1,151 @@
+import { useEffect, useReducer } from "react";
 import {
   StyleSheet,
   View,
-  Text,
   ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
+  Text,
   TextInput,
   TouchableOpacity,
+  Keyboard,
+  TouchableWithoutFeedback,
   //   useWindowDimensions,
 } from "react-native";
 
+const initialState = {
+  isKeyboardShown: false,
+  login: "",
+  email: "",
+  password: "",
+};
+const ACTION_TYPES = {
+  SET_IS_KEYBOARD_SHOWN: "SET_IS_KEYBOARD_SHOWN",
+  SET_LOGIN: "SET_LOGIN",
+  SET_EMAIL: "SET_EMAIL",
+  SET_PASSWORD: "SET_PASSWORD",
+  RESET: "RESET",
+};
+
+const reducer = (state, { type, payload }) => {
+  switch (type) {
+    case ACTION_TYPES.SET_IS_KEYBOARD_SHOWN:
+      return { ...state, isKeyboardShown: payload };
+    case ACTION_TYPES.SET_LOGIN:
+      return { ...state, login: payload };
+    case ACTION_TYPES.SET_EMAIL:
+      return { ...state, email: payload };
+    case ACTION_TYPES.SET_PASSWORD:
+      return { ...state, password: payload };
+    case ACTION_TYPES.RESET:
+      return { ...initialState };
+    default:
+      return state;
+  }
+};
+
 const RegistrationScreen = () => {
   //   const width = useWindowDimensions().width;
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { isKeyboardShown, login, email, password } = state;
+
+  const onFocus = () =>
+    dispatch({ type: ACTION_TYPES.SET_IS_KEYBOARD_SHOWN, payload: true });
+
+  const onLoginChange = (value) =>
+    dispatch({ type: ACTION_TYPES.SET_LOGIN, payload: value });
+
+  const onEmailChange = (value) =>
+    dispatch({ type: ACTION_TYPES.SET_EMAIL, payload: value });
+
+  const onPasswordChange = (value) =>
+    dispatch({ type: ACTION_TYPES.SET_PASSWORD, payload: value });
+
+  const closeKeyboard = () => Keyboard.dismiss();
+
+  const onBtnPress = () => {
+    console.log("login:", login);
+    console.log("email:", email);
+    console.log("password:", password);
+    closeKeyboard();
+    dispatch({ type: ACTION_TYPES.RESET });
+  };
+
+  const keyboardDidHide = () =>
+    dispatch({
+      type: ACTION_TYPES.SET_IS_KEYBOARD_SHOWN,
+      payload: false,
+    });
+
+  useEffect(() => {
+    Keyboard.addListener("keyboardDidHide", keyboardDidHide);
+
+    return () => {
+      Keyboard.removeListener("keyboardDidHide", keyboardDidHide);
+    };
+  }, []);
+
   return (
-    <View style={s.container}>
-      <ImageBackground
-        source={require("../assets/images/PhotoBG.jpg")}
-        style={s.image}
-      >
-        <View style={s.form}>
-          <View style={s.formWrapper}>
-            <Text style={s.title}>Регистрация</Text>
-            <TextInput
-              style={s.input}
-              placeholder="Логин"
-              placeholderTextColor="#BDBDBD"
-            />
-            <TextInput
-              style={s.input}
-              placeholder="Адрес электронной почты"
-              placeholderTextColor="#BDBDBD"
-            />
-            <TextInput
-              style={s.input}
-              secureTextEntry={true}
-              textContentType="newPassword"
-              placeholder="Пароль"
-              placeholderTextColor="#BDBDBD"
-            />
-            <TouchableOpacity style={s.btn} activeOpacity={0.7}>
-              <Text style={s.btnText}>Зарегистрироваться</Text>
-            </TouchableOpacity>
-            <Text style={s.text}>Уже есть аккаунт? Войти</Text>
-          </View>
-        </View>
-      </ImageBackground>
-    </View>
+    <TouchableWithoutFeedback onPress={closeKeyboard}>
+      <View style={s.container}>
+        <ImageBackground
+          source={require("../assets/images/PhotoBG.jpg")}
+          style={s.image}
+        >
+          <KeyboardAvoidingView
+            behavior={Platform.select({ android: undefined, ios: "padding" })}
+          >
+            <View
+              style={{
+                ...s.form,
+                ...Platform.select({
+                  android: { marginBottom: isKeyboardShown ? -150 : 0 },
+                  ios: { marginBottom: isKeyboardShown ? 150 : 0 },
+                }),
+              }}
+            >
+              <View style={s.formWrapper}>
+                <Text style={s.title}>Регистрация</Text>
+                <TextInput
+                  style={s.input}
+                  placeholder="Логин"
+                  placeholderTextColor="#BDBDBD"
+                  onFocus={onFocus}
+                  onChangeText={onLoginChange}
+                  value={login}
+                />
+                <TextInput
+                  style={s.input}
+                  placeholder="Адрес электронной почты"
+                  placeholderTextColor="#BDBDBD"
+                  onFocus={onFocus}
+                  onChangeText={onEmailChange}
+                  value={email}
+                />
+                <TextInput
+                  style={s.input}
+                  secureTextEntry={true}
+                  textContentType="newPassword"
+                  placeholder="Пароль"
+                  placeholderTextColor="#BDBDBD"
+                  onFocus={onFocus}
+                  onChangeText={onPasswordChange}
+                  value={password}
+                />
+                <TouchableOpacity
+                  style={s.btn}
+                  activeOpacity={0.7}
+                  onPress={onBtnPress}
+                >
+                  <Text style={s.btnText}>Зарегистрироваться</Text>
+                </TouchableOpacity>
+                <Text style={s.text}>Уже есть аккаунт? Войти</Text>
+              </View>
+            </View>
+          </KeyboardAvoidingView>
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
