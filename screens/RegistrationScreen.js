@@ -36,7 +36,7 @@ const RegistrationScreen = () => {
               placeholder="Пароль"
               placeholderTextColor="#BDBDBD"
             />
-            <TouchableOpacity style={s.btn}>
+            <TouchableOpacity style={s.btn} activeOpacity={0.7}>
               <Text style={s.btnText}>Зарегистрироваться</Text>
             </TouchableOpacity>
             <Text style={s.text}>Уже есть аккаунт? Войти</Text>
@@ -57,6 +57,7 @@ const s = StyleSheet.create({
     justifyContent: "flex-end",
   },
   form: {
+    alignItems: "center",
     backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
@@ -64,13 +65,15 @@ const s = StyleSheet.create({
   formWrapper: {
     marginHorizontal: 16,
     paddingBottom: 45,
+    width: "100%",
+    maxWidth: 400,
     alignItems: "center",
   },
   title: {
     marginTop: 92,
     marginBottom: 32,
+    fontFamily: "Roboto-Medium",
     fontSize: 30,
-    // fontWeight: 500,
   },
   input: {
     marginBottom: 16,
@@ -81,6 +84,7 @@ const s = StyleSheet.create({
     borderColor: "#E8E8E8",
     borderRadius: 8,
     backgroundColor: "#F6F6F6",
+    fontFamily: "Roboto",
     fontSize: 16,
   },
   btn: {
@@ -95,10 +99,14 @@ const s = StyleSheet.create({
     backgroundColor: "#FF6C00",
   },
   btnText: {
+    fontFamily: "Roboto",
+    fontSize: 16,
     color: "#FFFFFF",
   },
   text: {
     marginTop: 16,
+    fontFamily: "Roboto",
+    fontSize: 16,
     color: "#1B4371",
   },
 });
