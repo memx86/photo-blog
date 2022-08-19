@@ -163,7 +163,7 @@ const Auth = ({ type = TYPES.REGISTER }) => {
                 </TouchableOpacity>
                 <Text style={s.text}>
                   {isRegister
-                    ? "Уже есть аккаунт?"
+                    ? "Уже есть аккаунт? Войти"
                     : "Нет аккаунта? Зарегистрироваться"}
                 </Text>
               </View>
