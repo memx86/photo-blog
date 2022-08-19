@@ -1,8 +1,8 @@
 import { View, Text, StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
+import { NavigationContainer } from "@react-navigation/native";
 
-import RegistrationScreen from "./screens/auth/RegistrationScreen";
-// import LoginScreen from "./screens/auth/LoginScreen";
+import useNavigator from "./navigator";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -11,6 +11,8 @@ export default function App() {
     "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
   });
 
+  const navigator = useNavigator(false);
+
   if (!fontsLoaded)
     return (
       <View style={s.loader}>
@@ -18,8 +20,7 @@ export default function App() {
       </View>
     );
 
-  return <RegistrationScreen />;
-  // return <LoginScreen />;
+  return <NavigationContainer>{navigator}</NavigationContainer>;
 }
 
 const s = StyleSheet.create({

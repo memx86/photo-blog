@@ -48,9 +48,23 @@ const reducer = (state, { type, payload }) => {
   }
 };
 
-const Auth = ({ type = TYPES.REGISTER }) => {
+const Auth = ({ type = TYPES.REGISTER, navigation }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { isKeyboardShown, login, email, password } = state;
+
+  const onKeyboardHide = () =>
+    dispatch({
+      type: ACTION_TYPES.SET_IS_KEYBOARD_SHOWN,
+      payload: false,
+    });
+
+  useEffect(() => {
+    Keyboard.addListener("keyboardDidHide", onKeyboardHide);
+
+    return () => {
+      Keyboard.removeListener("keyboardDidHide", onKeyboardHide);
+    };
+  }, []);
 
   const onFocus = () =>
     dispatch({ type: ACTION_TYPES.SET_IS_KEYBOARD_SHOWN, payload: true });
@@ -87,19 +101,8 @@ const Auth = ({ type = TYPES.REGISTER }) => {
     dispatch({ type: ACTION_TYPES.RESET });
   };
 
-  const onKeyboardHide = () =>
-    dispatch({
-      type: ACTION_TYPES.SET_IS_KEYBOARD_SHOWN,
-      payload: false,
-    });
-
-  useEffect(() => {
-    Keyboard.addListener("keyboardDidHide", onKeyboardHide);
-
-    return () => {
-      Keyboard.removeListener("keyboardDidHide", onKeyboardHide);
-    };
-  }, []);
+  const onLinkPress = () =>
+    navigation.navigate(isRegister ? "Login" : "Registration");
 
   return (
     <TouchableWithoutFeedback onPress={closeKeyboard}>
@@ -161,11 +164,20 @@ const Auth = ({ type = TYPES.REGISTER }) => {
                     {isRegister ? "Зарегистрироваться" : "Войти"}
                   </Text>
                 </TouchableOpacity>
-                <Text style={s.text}>
-                  {isRegister
-                    ? "Уже есть аккаунт? Войти"
-                    : "Нет аккаунта? Зарегистрироваться"}
-                </Text>
+                <View style={s.linkWrapper}>
+                  <Text style={s.text}>
+                    {isRegister ? "Уже есть аккаунт? " : "Нет аккаунта? "}
+                  </Text>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={s.link}
+                    onPress={onLinkPress}
+                  >
+                    <Text style={s.text}>
+                      {isRegister ? "Войти" : "Зарегистрироваться"}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </KeyboardAvoidingView>
@@ -231,11 +243,17 @@ const s = StyleSheet.create({
     fontSize: 16,
     color: "#FFFFFF",
   },
-  text: {
+  linkWrapper: {
     marginTop: 16,
+    flexDirection: "row",
+  },
+  text: {
     fontFamily: "Roboto",
     fontSize: 16,
     color: "#1B4371",
+  },
+  link: {
+    marginLeft: 8,
   },
 });
 
