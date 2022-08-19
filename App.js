@@ -1,17 +1,23 @@
+import { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  useNavigationContainerRef,
+} from "@react-navigation/native";
 
 import useNavigator from "./navigator";
+import AuthContext from "./assets/context/AuthContext";
 
 export default function App() {
+  const [isAuth, setIsAuth] = useState(false);
   const [fontsLoaded] = useFonts({
     Roboto: require("./assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
     "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
   });
-
-  const navigator = useNavigator(false);
+  const navigationRef = useNavigationContainerRef();
+  const navigator = useNavigator({ isAuth, navigationRef, setIsAuth });
 
   if (!fontsLoaded)
     return (
@@ -20,7 +26,11 @@ export default function App() {
       </View>
     );
 
-  return <NavigationContainer>{navigator}</NavigationContainer>;
+  return (
+    <AuthContext.Provider value={{ setIsAuth }}>
+      <NavigationContainer ref={navigationRef}>{navigator}</NavigationContainer>
+    </AuthContext.Provider>
+  );
 }
 
 const s = StyleSheet.create({

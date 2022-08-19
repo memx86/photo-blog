@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -11,6 +11,8 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
+
+import AuthContext from "../assets/context/AuthContext";
 
 export const TYPES = {
   REGISTER: "REGISTER",
@@ -50,6 +52,7 @@ const reducer = (state, { type, payload }) => {
 
 const Auth = ({ type = TYPES.REGISTER, navigation }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { setIsAuth } = useContext(AuthContext);
   const { isKeyboardShown, login, email, password } = state;
 
   const onKeyboardHide = () =>
@@ -99,6 +102,7 @@ const Auth = ({ type = TYPES.REGISTER, navigation }) => {
     onSubmit();
     closeKeyboard();
     dispatch({ type: ACTION_TYPES.RESET });
+    setIsAuth(true);
   };
 
   const onLinkPress = () =>
