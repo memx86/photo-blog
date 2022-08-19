@@ -6,8 +6,8 @@ import {
   useNavigationContainerRef,
 } from "@react-navigation/native";
 
-import useNavigator from "./navigator";
 import AuthContext from "./assets/context/AuthContext";
+import Navigator from "./screens/Navigator";
 
 export default function App() {
   const [isAuth, setIsAuth] = useState(false);
@@ -17,7 +17,6 @@ export default function App() {
     "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
   });
   const navigationRef = useNavigationContainerRef();
-  const navigator = useNavigator({ isAuth, navigationRef, setIsAuth });
 
   if (!fontsLoaded)
     return (
@@ -28,7 +27,13 @@ export default function App() {
 
   return (
     <AuthContext.Provider value={{ setIsAuth }}>
-      <NavigationContainer ref={navigationRef}>{navigator}</NavigationContainer>
+      <NavigationContainer ref={navigationRef}>
+        <Navigator
+          isAuth={isAuth}
+          navigationRef={navigationRef}
+          setIsAuth={setIsAuth}
+        />
+      </NavigationContainer>
     </AuthContext.Provider>
   );
 }
