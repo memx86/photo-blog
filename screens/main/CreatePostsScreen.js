@@ -1,6 +1,12 @@
+import { useEffect, useState } from "react";
 import {
   StyleSheet,
+  ScrollView,
+  TouchableWithoutFeedback,
   View,
+  KeyboardAvoidingView,
+  Keyboard,
+  Platform,
   Text,
   Image,
   TouchableOpacity,
@@ -11,56 +17,90 @@ import { Feather } from "@expo/vector-icons";
 
 const CreatePostsScreen = () => {
   const { width } = useWindowDimensions();
+  const [isKeyboardShown, setIsKeyboardShown] = useState(false);
+
+  const onKeyboardShow = () => setIsKeyboardShown(true);
+
+  const onKeyboardHide = () => setIsKeyboardShown(false);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener(
+      "keyboardDidShow",
+      onKeyboardShow
+    );
+    const hideSubscription = Keyboard.addListener(
+      "keyboardDidHide",
+      onKeyboardHide
+    );
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
+  const closeKeyboard = () => Keyboard.dismiss();
 
   return (
-    <View style={s.container}>
-      <TouchableOpacity activeOpacity={0.7}>
-        <View
-          style={{
-            ...s.imageWrapper,
-            width: width - 16 * 2,
-            height: (width - 16 * 2) / 1.43,
-          }}
+    <TouchableWithoutFeedback onPress={closeKeyboard}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.select({ android: "height", ios: "padding" })}
+      >
+        <ScrollView
+          style={s.container}
+          scrollEnabled={isKeyboardShown ? true : false}
         >
-          <View style={s.cameraImageWrapper}>
-            <Image
-              source={require("../../assets/images/camera.png")}
-              style={s.cameraImage}
-            />
+          <View style={{ marginBottom: isKeyboardShown ? 150 : 0 }}>
+            <TouchableOpacity activeOpacity={0.7}>
+              <View
+                style={{
+                  ...s.imageWrapper,
+                  width: width - 16 * 2,
+                  height: (width - 16 * 2) / 1.43,
+                }}
+              >
+                <View style={s.cameraImageWrapper}>
+                  <Image
+                    source={require("../../assets/images/camera.png")}
+                    style={s.cameraImage}
+                  />
+                </View>
+              </View>
+              <Text style={s.imageText}>Загрузите фото</Text>
+            </TouchableOpacity>
+            <View style={s.inputWrapper}>
+              <TextInput
+                style={s.input}
+                placeholder="Название..."
+                placeholderTextColor="#BDBDBD"
+              />
+              <View style={s.locationInputWrapper}>
+                <TextInput
+                  style={{ ...s.input, paddingLeft: 28 }}
+                  placeholder="Местность..."
+                  placeholderTextColor="#BDBDBD"
+                />
+                <Feather
+                  name="map-pin"
+                  size={24}
+                  color="#BDBDBD"
+                  style={s.locationIcon}
+                />
+              </View>
+            </View>
+            <TouchableOpacity style={s.btn} activeOpacity={0.7}>
+              <Text style={s.btnText}>Опубликовать</Text>
+            </TouchableOpacity>
           </View>
-        </View>
-        <Text style={s.imageText}>Загрузите фото</Text>
-      </TouchableOpacity>
-      <View style={s.inputWrapper}>
-        <TextInput
-          style={s.input}
-          placeholder="Название..."
-          placeholderTextColor="#BDBDBD"
-        />
-        <View style={s.locationInputWrapper}>
-          <TextInput
-            style={{ ...s.input, paddingLeft: 28 }}
-            placeholder="Местность..."
-            placeholderTextColor="#BDBDBD"
-          />
-          <Feather
-            name="map-pin"
-            size={24}
-            color="#BDBDBD"
-            style={s.locationIcon}
-          />
-        </View>
-      </View>
-      <TouchableOpacity style={s.btn} activeOpacity={0.7}>
-        <Text style={s.btnText}>Опубликовать</Text>
-      </TouchableOpacity>
-    </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
 const s = StyleSheet.create({
   container: {
-    flex: 1,
     paddingTop: 32,
     paddingBottom: 32,
     paddingLeft: 16,
