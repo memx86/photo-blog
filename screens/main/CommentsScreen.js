@@ -1,10 +1,10 @@
 import { View, Text } from "react-native";
 
-function CommentsScreen() {
+const CommentsScreen = () => {
   return (
     <View>
       <Text>CommentsScreen</Text>
     </View>
   );
-}
+};
 export default CommentsScreen;

@@ -7,9 +7,15 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
-const Post = ({ post, style }) => {
-  const { imageURL, title, comments, location } = post;
+export const TYPES = {
+  PROFILE: "PROFILE",
+  POSTS: "POSTS",
+};
+
+const Post = ({ post, style, type }) => {
+  const { imageURL, title, comments, location, likes } = post;
   const { width } = useWindowDimensions();
+  const isPosts = type === TYPES.POSTS;
 
   return (
     <View style={{ ...s.container, ...style }}>
@@ -23,11 +29,45 @@ const Post = ({ post, style }) => {
           }}
         />
       </View>
-      <Text style={title}>{title}</Text>
+      <Text style={s.title}>{title}</Text>
       <View style={s.wrapper}>
-        <View style={s.comments}>
-          <Feather name="message-circle" size={24} color="#BDBDBD" />
-          <Text style={s.commentsNumber}>{comments.length}</Text>
+        <View style={s.commentsWrapper}>
+          <View style={s.comments}>
+            {isPosts ? (
+              <Feather
+                name="message-circle"
+                size={24}
+                color="#BDBDBD"
+                style={{ transform: [{ rotateY: "180deg" }] }}
+              />
+            ) : (
+              <Image
+                source={require("../assets/images/message-circle.png")}
+                style={{ width: 24, height: 24 }}
+              />
+            )}
+            <Text
+              style={{
+                ...s.commentsNumber,
+                color: isPosts ? "#BDBDBD" : "#212121",
+              }}
+            >
+              {comments.length}
+            </Text>
+          </View>
+          {!isPosts && (
+            <View style={{ ...s.comments, marginLeft: 24 }}>
+              <Feather name="thumbs-up" size={24} color="#FF6C00" />
+              <Text
+                style={{
+                  ...s.commentsNumber,
+                  color: "#212121",
+                }}
+              >
+                {likes}
+              </Text>
+            </View>
+          )}
         </View>
         <View style={s.map}>
           <Feather name="map-pin" size={24} color="#BDBDBD" />
@@ -57,6 +97,9 @@ const s = StyleSheet.create({
   wrapper: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  commentsWrapper: {
+    flexDirection: "row",
   },
   comments: {
     flexDirection: "row",
