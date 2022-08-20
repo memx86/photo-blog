@@ -25,8 +25,15 @@ export default function App() {
       </View>
     );
 
+  // Test user
+  const user = {
+    avatarURL: "https://reactjs.org/logo-og.png",
+    name: "Yevhen Malyshko",
+    email: "test@mail.com",
+  };
+
   return (
-    <AuthContext.Provider value={{ setIsAuth }}>
+    <AuthContext.Provider value={{ setIsAuth, user }}>
       <NavigationContainer ref={navigationRef}>
         <Navigator
           isAuth={isAuth}

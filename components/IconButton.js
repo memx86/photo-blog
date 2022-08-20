@@ -1,6 +1,6 @@
 import { TouchableOpacity, StyleSheet } from "react-native";
 
-function IconButton({ children, style, onPress }) {
+const IconButton = ({ children, style, onPress }) => {
   return (
     <TouchableOpacity
       style={{ ...s.container, ...style }}
@@ -10,7 +10,7 @@ function IconButton({ children, style, onPress }) {
       {children}
     </TouchableOpacity>
   );
-}
+};
 
 const s = StyleSheet.create({
   container: {

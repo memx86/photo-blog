@@ -1,13 +1,13 @@
 import { View, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
-function AddPostIcon() {
+const AddPostIcon = () => {
   return (
     <View style={s.container}>
       <Feather name="plus" size={13} color="#ffffff" />
     </View>
   );
-}
+};
 
 const s = StyleSheet.create({
   container: {

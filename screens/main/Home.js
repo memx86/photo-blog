@@ -47,13 +47,13 @@ const Home = ({ onLogout, onGoBack }) => {
           ...Platform.select({
             ios: {
               shadowOffset: { width: 0, height: -0.5 },
-              shadowOpacity: 0.2,
+              shadowOpacity: 0.3,
               shadowRadius: 0,
               shadowColor: "#000000",
             },
             android: {
               shadowColor: "#000000",
-              elevation: 10,
+              elevation: 20,
             },
           }),
         },

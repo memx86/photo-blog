@@ -65,14 +65,18 @@ const Auth = ({ type = TYPES.REGISTER, navigation }) => {
     });
 
   useEffect(() => {
-    Keyboard.addListener("keyboardDidShow", onKeyboardShow);
-    Keyboard.addListener("keyboardDidHide", onKeyboardHide);
+    const showSubscription = Keyboard.addListener(
+      "keyboardDidShow",
+      onKeyboardShow
+    );
+    const hideSubscription = Keyboard.addListener(
+      "keyboardDidHide",
+      onKeyboardHide
+    );
 
     return () => {
-      // Keyboard.removeListener("keyboardDidShow", onKeyboardShow);
-      // Keyboard.removeListener("keyboardDidHide", onKeyboardHide);
-      // Keyboard.removeListener gets a "deprecated" warning
-      Keyboard.removeAllListeners("keyboardDidHide");
+      showSubscription.remove();
+      hideSubscription.remove();
     };
   }, []);
 
