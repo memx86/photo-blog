@@ -55,6 +55,9 @@ const Auth = ({ type = TYPES.REGISTER, navigation }) => {
   const { setIsAuth } = useContext(AuthContext);
   const { isKeyboardShown, login, email, password } = state;
 
+  const onKeyboardShow = () =>
+    dispatch({ type: ACTION_TYPES.SET_IS_KEYBOARD_SHOWN, payload: true });
+
   const onKeyboardHide = () =>
     dispatch({
       type: ACTION_TYPES.SET_IS_KEYBOARD_SHOWN,
@@ -62,15 +65,16 @@ const Auth = ({ type = TYPES.REGISTER, navigation }) => {
     });
 
   useEffect(() => {
+    Keyboard.addListener("keyboardDidShow", onKeyboardShow);
     Keyboard.addListener("keyboardDidHide", onKeyboardHide);
 
     return () => {
-      Keyboard.removeListener("keyboardDidHide", onKeyboardHide);
+      // Keyboard.removeListener("keyboardDidShow", onKeyboardShow);
+      // Keyboard.removeListener("keyboardDidHide", onKeyboardHide);
+      // Keyboard.removeListener gets a "deprecated" warning
+      Keyboard.removeAllListeners("keyboardDidHide");
     };
   }, []);
-
-  const onFocus = () =>
-    dispatch({ type: ACTION_TYPES.SET_IS_KEYBOARD_SHOWN, payload: true });
 
   const onLoginChange = (value) =>
     dispatch({ type: ACTION_TYPES.SET_LOGIN, payload: value });
@@ -136,7 +140,6 @@ const Auth = ({ type = TYPES.REGISTER, navigation }) => {
                     style={s.input}
                     placeholder="Логин"
                     placeholderTextColor="#BDBDBD"
-                    onFocus={onFocus}
                     onChangeText={onLoginChange}
                     value={login}
                   />
@@ -145,7 +148,6 @@ const Auth = ({ type = TYPES.REGISTER, navigation }) => {
                   style={s.input}
                   placeholder="Адрес электронной почты"
                   placeholderTextColor="#BDBDBD"
-                  onFocus={onFocus}
                   onChangeText={onEmailChange}
                   value={email}
                 />
@@ -155,7 +157,6 @@ const Auth = ({ type = TYPES.REGISTER, navigation }) => {
                   textContentType="newPassword"
                   placeholder="Пароль"
                   placeholderTextColor="#BDBDBD"
-                  onFocus={onFocus}
                   onChangeText={onPasswordChange}
                   value={password}
                 />

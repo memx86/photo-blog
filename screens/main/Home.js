@@ -43,6 +43,20 @@ const Home = ({ onLogout, onGoBack }) => {
           lineHeight: 22,
           color: "#212121",
         },
+        tabBarStyle: {
+          ...Platform.select({
+            ios: {
+              shadowOffset: { width: 0, height: -0.5 },
+              shadowOpacity: 0.2,
+              shadowRadius: 0,
+              shadowColor: "#000000",
+            },
+            android: {
+              shadowColor: "#000000",
+              elevation: 10,
+            },
+          }),
+        },
       }}
     >
       <Main.Screen
