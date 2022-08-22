@@ -79,6 +79,13 @@ const CreatePostsScreen = () => {
 
   const { isCameraActive, photo, title, locationName, location } = state;
 
+  const isValidData =
+    !!photo &&
+    !!title &&
+    !!locationName &&
+    !!location.latitude &&
+    !!location.longitude;
+
   const closeKeyboard = () => Keyboard.dismiss();
 
   const openCamera = () =>
@@ -87,25 +94,30 @@ const CreatePostsScreen = () => {
     dispatch({ type: ACTION_TYPES.SET_IS_CAMERA_ACTIVE, payload: false });
 
   const makePicture = async () => {
-    if (!cameraPermission.granted) {
-      await requestCameraPermission();
-    }
-    if (!locationPermission.granted) {
-      await requestLocationPermission();
-    }
-    const { uri } = await camera.takePictureAsync();
-    const { coords } = await Location.getCurrentPositionAsync();
-    const { latitude, longitude } = coords;
+    try {
+      if (!cameraPermission.granted) {
+        await requestCameraPermission();
+      }
+      if (!locationPermission.granted) {
+        await requestLocationPermission();
+      }
 
-    dispatch({
-      type: ACTION_TYPES.SET_PHOTO,
-      payload: uri,
-    });
-    dispatch({
-      type: ACTION_TYPES.SET_LOCATION,
-      payload: { latitude, longitude },
-    });
-    closeCamera();
+      const { uri } = await camera.takePictureAsync();
+      const { coords } = await Location.getCurrentPositionAsync();
+      const { latitude, longitude } = coords;
+
+      dispatch({
+        type: ACTION_TYPES.SET_PHOTO,
+        payload: uri,
+      });
+      dispatch({
+        type: ACTION_TYPES.SET_LOCATION,
+        payload: { latitude, longitude },
+      });
+      closeCamera();
+    } catch (error) {
+      closeCamera();
+    }
   };
 
   const onTitleChange = (value) =>
@@ -118,6 +130,7 @@ const CreatePostsScreen = () => {
     console.log(title);
     console.log(locationName);
     console.log(location);
+    dispatch({ type: ACTION_TYPES.RESET });
   };
 
   return (
@@ -184,13 +197,19 @@ const CreatePostsScreen = () => {
                 />
               </View>
             </View>
-            <TouchableOpacity
-              style={s.btn}
-              activeOpacity={0.7}
-              onPress={onSubmitPost}
-            >
-              <Text style={s.btnText}>Опубликовать</Text>
-            </TouchableOpacity>
+            {isValidData ? (
+              <TouchableOpacity
+                style={s.btn}
+                activeOpacity={0.7}
+                onPress={onSubmitPost}
+              >
+                <Text style={s.btnText}>Опубликовать</Text>
+              </TouchableOpacity>
+            ) : (
+              <View style={{ ...s.btn, opacity: 0.5 }}>
+                <Text style={s.btnText}>Опубликовать</Text>
+              </View>
+            )}
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
