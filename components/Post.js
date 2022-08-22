@@ -14,12 +14,13 @@ export const TYPES = {
 };
 
 const Post = ({ post, style, type, navigation }) => {
-  const { imageURL, title, comments, location, likes } = post;
+  const { imageURL, title, comments, locationName, location, likes } = post;
   const { width } = useWindowDimensions();
   const isPosts = type === TYPES.POSTS;
 
-  const onCommentsPress = () => navigation.navigate("Comments");
-  const onMapPress = () => navigation.navigate("Map");
+  const onCommentsPress = () => navigation.navigate("Comments", { comments });
+  const onMapPress = () =>
+    navigation.navigate("Map", { location, locationName });
 
   return (
     <View style={{ ...s.container, ...style }}>
@@ -57,7 +58,7 @@ const Post = ({ post, style, type, navigation }) => {
                   color: isPosts ? "#BDBDBD" : "#212121",
                 }}
               >
-                {comments.length}
+                {comments?.length ? comments?.length : 0}
               </Text>
             </View>
           </TouchableOpacity>
@@ -78,7 +79,7 @@ const Post = ({ post, style, type, navigation }) => {
         <TouchableOpacity activeOpacity={0.7} onPress={onMapPress}>
           <View style={s.map}>
             <Feather name="map-pin" size={24} color="#BDBDBD" />
-            <Text style={s.location}>{location}</Text>
+            <Text style={s.location}>{locationName}</Text>
           </View>
         </TouchableOpacity>
       </View>

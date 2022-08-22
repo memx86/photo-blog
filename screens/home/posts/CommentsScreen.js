@@ -1,6 +1,16 @@
 import { View, Text } from "react-native";
+import { useRoute } from "@react-navigation/native";
 
-const CommentsScreen = () => {
+import useHideParentBottomBar from "../../../assets/hooks/useHideParentBottomBar";
+
+const CommentsScreen = ({ parentNavigation }) => {
+  const route = useRoute();
+  useHideParentBottomBar({
+    route,
+    navigation: parentNavigation,
+    name: "Comments",
+  });
+
   return (
     <View>
       <Text>CommentsScreen</Text>

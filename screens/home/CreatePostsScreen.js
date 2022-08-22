@@ -60,7 +60,7 @@ const reducer = (state, { type, payload }) => {
   }
 };
 
-const CreatePostsScreen = () => {
+const CreatePostsScreen = ({ navigation }) => {
   const { width } = useWindowDimensions();
   const [state, dispatch] = useReducer(reducer, initialState);
   const isKeyboardShown = useIsKeyboardShown(false);
@@ -126,10 +126,17 @@ const CreatePostsScreen = () => {
     dispatch({ type: ACTION_TYPES.SET_LOCATION_NAME, payload: value });
 
   const onSubmitPost = () => {
-    console.log(photo);
-    console.log(title);
-    console.log(locationName);
-    console.log(location);
+    const id = Date.now();
+    const userId = "UserId 2";
+    const post = {
+      id,
+      imageURL: photo,
+      title,
+      locationName,
+      location,
+      owner: userId,
+    };
+    navigation.navigate("Posts", { post });
     dispatch({ type: ACTION_TYPES.RESET });
   };
 

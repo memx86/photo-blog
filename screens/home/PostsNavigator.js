@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Feather } from "@expo/vector-icons";
 
@@ -12,12 +13,12 @@ const PostsStack = createNativeStackNavigator();
 
 const PostsNavigator = ({ onLogout, onGoBack }) => {
   const headerStyle = useHeaderStyle();
+  const navigation = useNavigation();
 
   return (
     <PostsStack.Navigator screenOptions={{ ...headerStyle }}>
       <PostsStack.Screen
         name="Posts"
-        component={PostsScreen}
         options={{
           title: "Публикации",
           headerRight: () => (
@@ -33,15 +34,35 @@ const PostsNavigator = ({ onLogout, onGoBack }) => {
             />
           ),
         }}
-      />
+      >
+        {() => <PostsScreen parentNavigation={navigation} />}
+      </PostsStack.Screen>
       <PostsStack.Screen
         name="Comments"
-        component={CommentsScreen}
         options={{
           title: "Комментарии",
+          headerLeft: () => (
+            <IconButton style={{ marginLeft: 16 }} onPress={onGoBack}>
+              <Feather name="arrow-left" size={24} color="#212121CC" />
+            </IconButton>
+          ),
         }}
-      />
-      <PostsStack.Screen name="Map" component={MapScreen} />
+      >
+        {() => <CommentsScreen parentNavigation={navigation} />}
+      </PostsStack.Screen>
+      <PostsStack.Screen
+        name="Map"
+        options={{
+          title: "Карта",
+          headerLeft: () => (
+            <IconButton style={{ marginLeft: 16 }} onPress={onGoBack}>
+              <Feather name="arrow-left" size={24} color="#212121CC" />
+            </IconButton>
+          ),
+        }}
+      >
+        {() => <MapScreen parentNavigation={navigation} />}
+      </PostsStack.Screen>
     </PostsStack.Navigator>
   );
 };
