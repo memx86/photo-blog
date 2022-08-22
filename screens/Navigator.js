@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import LoginScreen from "./auth/LoginScreen";
 import RegistrationScreen from "./auth/RegistrationScreen";
-import Home from "./main/Home";
+import HomeNavigator from "./HomeNavigator";
 
 const Auth = createNativeStackNavigator();
 
@@ -17,7 +17,7 @@ const Navigator = ({ isAuth, navigationRef, setIsAuth }) => {
         <Auth.Screen name="Registration" component={RegistrationScreen} />
       </Auth.Navigator>
     );
-  return <Home onLogout={onLogout} onGoBack={onGoBack} />;
+  return <HomeNavigator onLogout={onLogout} onGoBack={onGoBack} />;
 };
 
 export default Navigator;

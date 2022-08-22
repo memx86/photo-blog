@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import Post, { TYPES } from "./Post";
 
-const PostsList = ({ posts, style = {}, type = TYPES.POSTS }) => {
+const PostsList = ({ posts, style = {}, type = TYPES.POSTS, navigation }) => {
   return (
     <View style={style}>
       {posts?.map((post) => (
@@ -10,6 +10,7 @@ const PostsList = ({ posts, style = {}, type = TYPES.POSTS }) => {
           key={post.id}
           post={post}
           type={type}
+          navigation={navigation}
         />
       ))}
     </View>

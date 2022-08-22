@@ -1,11 +1,11 @@
 import { useContext } from "react";
 import { StyleSheet, ScrollView } from "react-native";
 
-import AuthContext from "../../assets/context/AuthContext";
-import UserCard from "../../components/UserCard";
-import PostsList from "../../components/PostsList";
+import AuthContext from "../../../assets/context/AuthContext";
+import UserCard from "../../../components/UserCard";
+import PostsList from "../../../components/PostsList";
 
-const PostsScreen = () => {
+const PostsScreen = ({ navigation }) => {
   const { user } = useContext(AuthContext);
   // test posts
   const posts = [
@@ -37,7 +37,8 @@ const PostsScreen = () => {
   return (
     <ScrollView style={s.container}>
       <UserCard user={user} style={s.userCard} />
-      <PostsList posts={posts} />
+      <PostsList posts={posts} navigation={navigation} />
+      {/* <PostsList posts={[]} /> */}
     </ScrollView>
   );
 };

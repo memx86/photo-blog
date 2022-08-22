@@ -15,7 +15,7 @@ import IconButton from "../../components/IconButton";
 import PostsList from "../../components/PostsList";
 import { TYPES } from "../../components/Post";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const { setIsAuth, user } = useContext(AuthContext);
   const { width } = useWindowDimensions();
   const { avatarURL, name } = user;
@@ -59,7 +59,11 @@ const ProfileScreen = () => {
             <Feather name="log-out" size={24} color="#BDBDBD" />
           </IconButton>
           <Text style={s.name}>{name}</Text>
-          <PostsList posts={posts} type={TYPES.PROFILE} />
+          <PostsList
+            posts={posts}
+            type={TYPES.PROFILE}
+            navigation={navigation}
+          />
         </View>
       </ImageBackground>
     </ScrollView>

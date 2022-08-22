@@ -3,6 +3,7 @@ import {
   View,
   Image,
   Text,
+  TouchableOpacity,
   useWindowDimensions,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
@@ -12,10 +13,13 @@ export const TYPES = {
   POSTS: "POSTS",
 };
 
-const Post = ({ post, style, type }) => {
+const Post = ({ post, style, type, navigation }) => {
   const { imageURL, title, comments, location, likes } = post;
   const { width } = useWindowDimensions();
   const isPosts = type === TYPES.POSTS;
+
+  const onCommentsPress = () => navigation.navigate("Comments");
+  const onMapPress = () => navigation.navigate("Map");
 
   return (
     <View style={{ ...s.container, ...style }}>
@@ -32,29 +36,31 @@ const Post = ({ post, style, type }) => {
       <Text style={s.title}>{title}</Text>
       <View style={s.wrapper}>
         <View style={s.commentsWrapper}>
-          <View style={s.comments}>
-            {isPosts ? (
-              <Feather
-                name="message-circle"
-                size={24}
-                color="#BDBDBD"
-                style={{ transform: [{ rotateY: "180deg" }] }}
-              />
-            ) : (
-              <Image
-                source={require("../assets/images/message-circle.png")}
-                style={{ width: 24, height: 24 }}
-              />
-            )}
-            <Text
-              style={{
-                ...s.commentsNumber,
-                color: isPosts ? "#BDBDBD" : "#212121",
-              }}
-            >
-              {comments.length}
-            </Text>
-          </View>
+          <TouchableOpacity activeOpacity={0.7} onPress={onCommentsPress}>
+            <View style={s.comments}>
+              {isPosts ? (
+                <Feather
+                  name="message-circle"
+                  size={24}
+                  color="#BDBDBD"
+                  style={{ transform: [{ rotateY: "180deg" }] }}
+                />
+              ) : (
+                <Image
+                  source={require("../assets/images/message-circle.png")}
+                  style={{ width: 24, height: 24 }}
+                />
+              )}
+              <Text
+                style={{
+                  ...s.commentsNumber,
+                  color: isPosts ? "#BDBDBD" : "#212121",
+                }}
+              >
+                {comments.length}
+              </Text>
+            </View>
+          </TouchableOpacity>
           {!isPosts && (
             <View style={{ ...s.comments, marginLeft: 24 }}>
               <Feather name="thumbs-up" size={24} color="#FF6C00" />
@@ -69,10 +75,12 @@ const Post = ({ post, style, type }) => {
             </View>
           )}
         </View>
-        <View style={s.map}>
-          <Feather name="map-pin" size={24} color="#BDBDBD" />
-          <Text style={s.location}>{location}</Text>
-        </View>
+        <TouchableOpacity activeOpacity={0.7} onPress={onMapPress}>
+          <View style={s.map}>
+            <Feather name="map-pin" size={24} color="#BDBDBD" />
+            <Text style={s.location}>{location}</Text>
+          </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

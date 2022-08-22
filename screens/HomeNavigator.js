@@ -2,47 +2,24 @@ import { Platform } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
 
-import PostsScreen from "./PostsScreen";
-import CreatePostsScreen from "./CreatePostsScreen";
-import ProfileScreen from "./ProfileScreen";
+import PostsNavigator from "./home/PostsNavigator";
+import CreatePostsScreen from "./home/CreatePostsScreen";
+import ProfileScreen from "./home/ProfileScreen";
 
-import AddPostIcon from "../../components/AddPostIcon";
-import IconButton from "../../components/IconButton";
+import AddPostIcon from "../components/AddPostIcon";
+import IconButton from "../components/IconButton";
+
+import useHeaderStyle from "../assets/hooks/useHeaderStyle";
 
 const Main = createBottomTabNavigator();
 
-const Home = ({ onLogout, onGoBack }) => {
+const HomeNavigator = ({ onLogout, onGoBack }) => {
+  const headerStyle = useHeaderStyle();
   return (
     <Main.Navigator
       screenOptions={{
+        ...headerStyle,
         tabBarShowLabel: false,
-        headerStyle: {
-          backgroundColor: "#ffffff",
-          ...Platform.select({
-            ios: {
-              shadowOffset: { width: 0, height: 0.5 },
-              shadowOpacity: 0.2,
-              shadowRadius: 0,
-              shadowColor: "#000000",
-            },
-            android: {
-              shadowColor: "#000000",
-              elevation: 10,
-            },
-          }),
-        },
-        headerTitleAlign: "center",
-        headerTitleContainerStyle: {
-          height: 44,
-          paddingTop: 11,
-          paddingBottom: 11,
-        },
-        headerTitleStyle: {
-          fontFamily: "Roboto-Medium",
-          fontSize: 17,
-          lineHeight: 22,
-          color: "#212121",
-        },
         tabBarStyle: {
           ...Platform.select({
             ios: {
@@ -60,15 +37,9 @@ const Home = ({ onLogout, onGoBack }) => {
       }}
     >
       <Main.Screen
-        name="Posts"
-        component={PostsScreen}
+        name="PostsScreen"
         options={{
-          title: "Публикации",
-          headerRight: () => (
-            <IconButton style={{ marginRight: 10 }} onPress={onLogout}>
-              <Feather name="log-out" size={24} color="#212121CC" />
-            </IconButton>
-          ),
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Feather
               name="grid"
@@ -77,7 +48,9 @@ const Home = ({ onLogout, onGoBack }) => {
             />
           ),
         }}
-      />
+      >
+        {() => <PostsNavigator onLogout={onLogout} onGoBack={onGoBack} />}
+      </Main.Screen>
       <Main.Screen
         name="CreatePosts"
         component={CreatePostsScreen}
@@ -109,4 +82,4 @@ const Home = ({ onLogout, onGoBack }) => {
     </Main.Navigator>
   );
 };
-export default Home;
+export default HomeNavigator;
