@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useContext } from "react";
+import { useReducer, useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -13,6 +13,7 @@ import {
 } from "react-native";
 
 import AuthContext from "../assets/context/AuthContext";
+import useIsKeyboardShown from "../assets/hooks/useIsKeyboardShown";
 
 export const TYPES = {
   REGISTER: "REGISTER",
@@ -20,13 +21,11 @@ export const TYPES = {
 };
 
 const initialState = {
-  isKeyboardShown: false,
   login: "",
   email: "",
   password: "",
 };
 const ACTION_TYPES = {
-  SET_IS_KEYBOARD_SHOWN: "SET_IS_KEYBOARD_SHOWN",
   SET_LOGIN: "SET_LOGIN",
   SET_EMAIL: "SET_EMAIL",
   SET_PASSWORD: "SET_PASSWORD",
@@ -35,8 +34,6 @@ const ACTION_TYPES = {
 
 const reducer = (state, { type, payload }) => {
   switch (type) {
-    case ACTION_TYPES.SET_IS_KEYBOARD_SHOWN:
-      return { ...state, isKeyboardShown: payload };
     case ACTION_TYPES.SET_LOGIN:
       return { ...state, login: payload };
     case ACTION_TYPES.SET_EMAIL:
@@ -53,32 +50,8 @@ const reducer = (state, { type, payload }) => {
 const Auth = ({ type = TYPES.REGISTER, navigation }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { setIsAuth } = useContext(AuthContext);
-  const { isKeyboardShown, login, email, password } = state;
-
-  const onKeyboardShow = () =>
-    dispatch({ type: ACTION_TYPES.SET_IS_KEYBOARD_SHOWN, payload: true });
-
-  const onKeyboardHide = () =>
-    dispatch({
-      type: ACTION_TYPES.SET_IS_KEYBOARD_SHOWN,
-      payload: false,
-    });
-
-  useEffect(() => {
-    const showSubscription = Keyboard.addListener(
-      "keyboardDidShow",
-      onKeyboardShow
-    );
-    const hideSubscription = Keyboard.addListener(
-      "keyboardDidHide",
-      onKeyboardHide
-    );
-
-    return () => {
-      showSubscription.remove();
-      hideSubscription.remove();
-    };
-  }, []);
+  const isKeyboardShown = useIsKeyboardShown(false);
+  const { login, email, password } = state;
 
   const onLoginChange = (value) =>
     dispatch({ type: ACTION_TYPES.SET_LOGIN, payload: value });

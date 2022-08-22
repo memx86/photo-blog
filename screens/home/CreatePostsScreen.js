@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   StyleSheet,
   ScrollView,
@@ -15,29 +14,11 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
+import useIsKeyboardShown from "../../assets/hooks/useIsKeyboardShown";
+
 const CreatePostsScreen = () => {
   const { width } = useWindowDimensions();
-  const [isKeyboardShown, setIsKeyboardShown] = useState(false);
-
-  const onKeyboardShow = () => setIsKeyboardShown(true);
-
-  const onKeyboardHide = () => setIsKeyboardShown(false);
-
-  useEffect(() => {
-    const showSubscription = Keyboard.addListener(
-      "keyboardDidShow",
-      onKeyboardShow
-    );
-    const hideSubscription = Keyboard.addListener(
-      "keyboardDidHide",
-      onKeyboardHide
-    );
-
-    return () => {
-      showSubscription.remove();
-      hideSubscription.remove();
-    };
-  }, []);
+  const isKeyboardShown = useIsKeyboardShown(false);
 
   const closeKeyboard = () => Keyboard.dismiss();
 
