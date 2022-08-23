@@ -13,6 +13,7 @@
     "@react-navigation/bottom-tabs": "^6.3.2",
     "@react-navigation/native": "^6.0.11",
     "@react-navigation/native-stack": "^6.7.0",
+    "dayjs": "^1.11.5",
     "expo": "~46.0.7",
     "expo-camera": "~12.3.0",
     "expo-font": "~10.2.0",

@@ -1,6 +1,6 @@
 import { StyleSheet, View, Image, Text } from "react-native";
 
-const UserCard = ({ user, style }) => {
+const UserCard = ({ user, style = {} }) => {
   const { avatarURL, name, email } = user;
   return (
     <View style={{ ...s.container, ...style }}>

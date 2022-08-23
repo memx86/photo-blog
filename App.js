@@ -6,8 +6,11 @@ import {
   useNavigationContainerRef,
 } from "@react-navigation/native";
 
-import AuthContext from "./assets/context/AuthContext";
 import Navigator from "./screens/Navigator";
+
+import AuthContext from "./assets/context/AuthContext";
+
+import users from "./users";
 
 export default function App() {
   const [isAuth, setIsAuth] = useState(false);
@@ -25,15 +28,8 @@ export default function App() {
       </View>
     );
 
-  // Test user
-  const user = {
-    avatarURL: "https://reactjs.org/logo-og.png",
-    name: "Yevhen Malyshko",
-    email: "test@mail.com",
-  };
-
   return (
-    <AuthContext.Provider value={{ setIsAuth, user }}>
+    <AuthContext.Provider value={{ setIsAuth, user: users[1] }}>
       <NavigationContainer ref={navigationRef}>
         <Navigator
           isAuth={isAuth}

@@ -13,12 +13,12 @@ export const TYPES = {
   POSTS: "POSTS",
 };
 
-const Post = ({ post, style, type, navigation }) => {
+const Post = ({ post, style = {}, type, navigation }) => {
   const { imageURL, title, comments, locationName, location, likes } = post;
   const { width } = useWindowDimensions();
   const isPosts = type === TYPES.POSTS;
 
-  const onCommentsPress = () => navigation.navigate("Comments", { comments });
+  const onCommentsPress = () => navigation.navigate("Comments", { post });
   const onMapPress = () =>
     navigation.navigate("Map", { location, locationName });
 
