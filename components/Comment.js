@@ -7,6 +7,8 @@ import {
 } from "react-native";
 import dayjs from "dayjs";
 
+import COLORS from "../assets/constants/COLORS";
+
 const Comment = ({ style = {}, comment, isLeft }) => {
   const { width } = useWindowDimensions();
   const { text, time, avatarURL } = comment;
@@ -61,14 +63,14 @@ const s = StyleSheet.create({
     fontFamily: "Roboto",
     fontSize: 16,
     lineHeight: 19,
-    color: "#212121",
+    color: COLORS.MAIN_DARK,
   },
   time: {
     marginTop: 8,
     fontFamily: "Roboto",
     fontSize: 10,
     lineHeight: 12,
-    color: "#BDBDBD",
+    color: COLORS.GREY,
     textAlign: "right",
   },
 });

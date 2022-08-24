@@ -1,9 +1,9 @@
-import { View, Text, StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
 import { Provider } from "react-redux";
 
 import { store } from "./redux/store";
 
+import Loader from "./components/Loader";
 import Main from "./Main";
 
 export default function App() {
@@ -13,12 +13,7 @@ export default function App() {
     "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
   });
 
-  if (!fontsLoaded)
-    return (
-      <View style={s.loader}>
-        <Text>Loading Fonts...</Text>
-      </View>
-    );
+  if (!fontsLoaded) return <Loader text="Loading Fonts" />;
 
   return (
     <Provider store={store}>
@@ -26,15 +21,3 @@ export default function App() {
     </Provider>
   );
 }
-
-const s = StyleSheet.create({
-  loader: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#ffffff",
-  },
-  loaderText: {
-    color: "#000000",
-  },
-});

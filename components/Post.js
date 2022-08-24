@@ -11,6 +11,7 @@ import { Feather } from "@expo/vector-icons";
 
 import db from "../firebase";
 import DB_KEYS from "../assets/constants/DB_KEYS";
+import COLORS from "../assets/constants/COLORS";
 
 export const TYPES = {
   PROFILE: "PROFILE",
@@ -63,7 +64,7 @@ const Post = ({ post, style = {}, type, navigation }) => {
                 <Feather
                   name="message-circle"
                   size={24}
-                  color="#BDBDBD"
+                  color={COLORS.GREY}
                   style={{ transform: [{ rotateY: "180deg" }] }}
                 />
               ) : (
@@ -75,7 +76,7 @@ const Post = ({ post, style = {}, type, navigation }) => {
               <Text
                 style={{
                   ...s.commentsNumber,
-                  color: isPosts ? "#BDBDBD" : "#212121",
+                  color: isPosts ? COLORS.GREY : COLORS.MAIN_DARK,
                 }}
               >
                 {comments?.length ? comments?.length : 0}
@@ -84,11 +85,11 @@ const Post = ({ post, style = {}, type, navigation }) => {
           </TouchableOpacity>
           {!isPosts && (
             <View style={{ ...s.comments, marginLeft: 24 }}>
-              <Feather name="thumbs-up" size={24} color="#FF6C00" />
+              <Feather name="thumbs-up" size={24} color={COLORS.ACCENT} />
               <Text
                 style={{
                   ...s.commentsNumber,
-                  color: "#212121",
+                  color: COLORS.MAIN_DARK,
                 }}
               >
                 {likes}
@@ -98,7 +99,7 @@ const Post = ({ post, style = {}, type, navigation }) => {
         </View>
         <TouchableOpacity activeOpacity={0.7} onPress={onMapPress}>
           <View style={s.map}>
-            <Feather name="map-pin" size={24} color="#BDBDBD" />
+            <Feather name="map-pin" size={24} color={COLORS.GREY} />
             <Text style={s.location}>{locationName}</Text>
           </View>
         </TouchableOpacity>
@@ -121,7 +122,7 @@ const s = StyleSheet.create({
     fontFamily: "Roboto-Medium",
     fontSize: 16,
     lineHeight: 19,
-    color: "#212121",
+    color: COLORS.MAIN_DARK,
   },
   wrapper: {
     flexDirection: "row",
@@ -139,7 +140,7 @@ const s = StyleSheet.create({
     fontFamily: "Roboto",
     fontSize: 16,
     lineHeight: 19,
-    color: "#BDBDBD",
+    color: COLORS.GREY,
   },
   map: {
     flexDirection: "row",
@@ -150,7 +151,7 @@ const s = StyleSheet.create({
     fontFamily: "Roboto",
     fontSize: 16,
     lineHeight: 19,
-    color: "#212121",
+    color: COLORS.MAIN_DARK,
     textDecorationLine: "underline",
   },
 });

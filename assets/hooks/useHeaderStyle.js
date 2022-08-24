@@ -1,8 +1,10 @@
 import { Platform } from "react-native";
 
+import COLORS from "../constants/COLORS";
+
 const useHeaderStyle = () => ({
   headerStyle: {
-    backgroundColor: "#ffffff",
+    backgroundColor: COLORS.MAIN_LIGHT,
     ...Platform.select({
       ios: {
         shadowOffset: { width: 0, height: 0.5 },
@@ -26,7 +28,7 @@ const useHeaderStyle = () => ({
     fontFamily: "Roboto-Medium",
     fontSize: 17,
     lineHeight: 22,
-    color: "#212121",
+    color: COLORS.MAIN_DARK,
   },
 });
 export default useHeaderStyle;

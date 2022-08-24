@@ -10,6 +10,7 @@ import AddPostIcon from "../components/AddPostIcon";
 import IconButton from "../components/IconButton";
 
 import useHeaderStyle from "../assets/hooks/useHeaderStyle";
+import COLORS from "../assets/constants/COLORS";
 
 const Main = createBottomTabNavigator();
 
@@ -44,7 +45,9 @@ const HomeNavigator = ({ onGoBack }) => {
             <Feather
               name="grid"
               size={24}
-              color={focused ? "#212121CC" : "#21212177"}
+              color={
+                focused ? `${COLORS.MAIN_DARK}CC` : `${COLORS.MAIN_DARK}77`
+              }
             />
           ),
         }}
@@ -58,7 +61,11 @@ const HomeNavigator = ({ onGoBack }) => {
           title: "Создать публикацию",
           headerLeft: () => (
             <IconButton style={{ marginLeft: 16 }} onPress={onGoBack}>
-              <Feather name="arrow-left" size={24} color="#212121CC" />
+              <Feather
+                name="arrow-left"
+                size={24}
+                color={`${COLORS.MAIN_DARK}CC`}
+              />
             </IconButton>
           ),
           tabBarIcon: () => <AddPostIcon />,
@@ -74,7 +81,9 @@ const HomeNavigator = ({ onGoBack }) => {
             <Feather
               name="user"
               size={24}
-              color={focused ? "#212121CC" : "#21212177"}
+              color={
+                focused ? `${COLORS.MAIN_DARK}CC` : `${COLORS.MAIN_DARK}77`
+              }
             />
           ),
         }}

@@ -11,6 +11,7 @@ import MapScreen from "./posts/MapScreen";
 import IconButton from "../../components/IconButton";
 
 import useHeaderStyle from "../../assets/hooks/useHeaderStyle";
+import COLORS from "../../assets/constants/COLORS";
 
 const PostsStack = createNativeStackNavigator();
 
@@ -29,14 +30,20 @@ const PostsNavigator = ({ onGoBack }) => {
           title: "Публикации",
           headerRight: () => (
             <IconButton style={{ marginRight: 10 }} onPress={onLogout}>
-              <Feather name="log-out" size={24} color="#212121CC" />
+              <Feather
+                name="log-out"
+                size={24}
+                color={`${COLORS.MAIN_DARK}CC`}
+              />
             </IconButton>
           ),
           tabBarIcon: ({ focused }) => (
             <Feather
               name="grid"
               size={24}
-              color={focused ? "#212121CC" : "#21212177"}
+              color={
+                focused ? `${COLORS.MAIN_DARK}CC` : `${COLORS.MAIN_DARK}77`
+              }
             />
           ),
         }}
@@ -48,8 +55,12 @@ const PostsNavigator = ({ onGoBack }) => {
         options={{
           title: "Комментарии",
           headerLeft: () => (
-            <IconButton style={{ marginLeft: 16 }} onPress={onGoBack}>
-              <Feather name="arrow-left" size={24} color="#212121CC" />
+            <IconButton onPress={onGoBack}>
+              <Feather
+                name="arrow-left"
+                size={24}
+                color={`${COLORS.MAIN_DARK}CC`}
+              />
             </IconButton>
           ),
         }}
@@ -61,8 +72,12 @@ const PostsNavigator = ({ onGoBack }) => {
         options={{
           title: "Карта",
           headerLeft: () => (
-            <IconButton style={{ marginLeft: 16 }} onPress={onGoBack}>
-              <Feather name="arrow-left" size={24} color="#212121CC" />
+            <IconButton onPress={onGoBack}>
+              <Feather
+                name="arrow-left"
+                size={24}
+                color={`${COLORS.MAIN_DARK}CC`}
+              />
             </IconButton>
           ),
         }}

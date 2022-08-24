@@ -27,6 +27,7 @@ import CameraIcon from "../../components/CameraIcon";
 import useIsKeyboardShown from "../../assets/hooks/useIsKeyboardShown";
 import uploadImage from "../../services/uploadImage";
 import DB_KEYS from "../../assets/constants/DB_KEYS";
+import COLORS from "../../assets/constants/COLORS";
 
 const ACTION_TYPES = {
   SET_IS_CAMERA_ACTIVE: "SET_IS_CAMERA_ACTIVE",
@@ -197,7 +198,7 @@ const CreatePostsScreen = ({ navigation }) => {
               <TextInput
                 style={s.input}
                 placeholder="Название..."
-                placeholderTextColor="#BDBDBD"
+                placeholderTextColor={COLORS.GREY}
                 value={title}
                 onChangeText={onTitleChange}
               />
@@ -205,14 +206,14 @@ const CreatePostsScreen = ({ navigation }) => {
                 <TextInput
                   style={{ ...s.input, paddingLeft: 28 }}
                   placeholder="Местность..."
-                  placeholderTextColor="#BDBDBD"
+                  placeholderTextColor={COLORS.GREY}
                   value={locationName}
                   onChangeText={onLocationNameChange}
                 />
                 <Feather
                   name="map-pin"
                   size={24}
-                  color="#BDBDBD"
+                  color={COLORS.GREY}
                   style={s.locationIcon}
                 />
               </View>
@@ -243,17 +244,17 @@ const s = StyleSheet.create({
     paddingBottom: 32,
     paddingLeft: 16,
     paddingRight: 16,
-    backgroundColor: "#ffffff",
+    backgroundColor: COLORS.MAIN_LIGHT,
   },
   imageWrapper: {
-    backgroundColor: "#E8E8E8",
+    backgroundColor: COLORS.THIRD_GREY,
   },
   imageText: {
     marginTop: 8,
     fontFamily: "Roboto",
     fontSize: 16,
     lineHeight: 19,
-    color: "#BDBDBD",
+    color: COLORS.GREY,
   },
   inputWrapper: {
     marginTop: 32,
@@ -263,11 +264,11 @@ const s = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#E8E8E8",
+    borderBottomColor: COLORS.THIRD_GREY,
     fontFamily: "Roboto-Medium",
     fontSize: 16,
     lineHeight: 19,
-    color: "#212121",
+    color: COLORS.MAIN_DARK,
   },
   locationInputWrapper: {
     position: "relative",
@@ -283,13 +284,13 @@ const s = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 100,
-    backgroundColor: "#FF6C00",
+    backgroundColor: COLORS.ACCENT,
   },
   btnText: {
     fontFamily: "Roboto",
     fontSize: 16,
     lineHeight: 19,
-    color: "#ffffff",
+    color: COLORS.MAIN_LIGHT,
   },
 });
 

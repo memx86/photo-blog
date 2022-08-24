@@ -1,4 +1,5 @@
 import { StyleSheet, View, Image, Text } from "react-native";
+import COLORS from "../assets/constants/COLORS";
 
 const UserCard = ({ user, style = {} }) => {
   const { avatarURL, name, email } = user;
@@ -29,13 +30,13 @@ const s = StyleSheet.create({
     fontFamily: "Roboto-Bold",
     fontSize: 13,
     lineHeight: 15,
-    color: "#212121",
+    color: COLORS.MAIN_DARK,
   },
   email: {
     fontFamily: "Roboto",
     fontSize: 11,
     lineHeight: 13,
-    color: "#212121CC",
+    color: `${COLORS.MAIN_DARK}CC`,
   },
 });
 

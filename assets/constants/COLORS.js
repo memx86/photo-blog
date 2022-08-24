@@ -1,0 +1,10 @@
+const COLORS = {
+  MAIN_LIGHT: "#ffffff",
+  GREY: "#BDBDBD",
+  SECONDARY_GREY: "F6F6F6",
+  THIRD_GREY: "#E8E8E8",
+  MAIN_DARK: "#212121",
+  ACCENT: "#FF6C00",
+  SECONDARY_ACCENT: "#1B4371",
+};
+export default COLORS;

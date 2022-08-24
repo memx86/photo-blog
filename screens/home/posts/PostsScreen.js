@@ -14,6 +14,7 @@ import { getUser } from "../../../redux/auth";
 import UserCard from "../../../components/UserCard";
 import PostsList from "../../../components/PostsList";
 import DB_KEYS from "../../../assets/constants/DB_KEYS";
+import COLORS from "../../../assets/constants/COLORS";
 
 const PostsScreen = ({ parentNavigation }) => {
   const user = useSelector(getUser);
@@ -54,7 +55,7 @@ const s = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: COLORS.MAIN_LIGHT,
   },
   userCard: {
     marginBottom: 32,

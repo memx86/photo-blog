@@ -20,6 +20,7 @@ import PostsList from "../../components/PostsList";
 import { TYPES } from "../../components/Post";
 
 import DB_KEYS from "../../assets/constants/DB_KEYS";
+import COLORS from "../../assets/constants/COLORS";
 
 const ProfileScreen = ({ navigation }) => {
   const user = useSelector(getUser);
@@ -56,7 +57,7 @@ const ProfileScreen = ({ navigation }) => {
             style={{ ...s.avatar, left: width / 2 - 60 }}
           />
           <IconButton onPress={onLogout} style={s.btn}>
-            <Feather name="log-out" size={24} color="#BDBDBD" />
+            <Feather name="log-out" size={24} color={COLORS.GREY} />
           </IconButton>
           <Text style={s.name}>{name}</Text>
           <PostsList
@@ -87,7 +88,7 @@ const s = StyleSheet.create({
     paddingRight: 16,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    backgroundColor: "#ffffff",
+    backgroundColor: COLORS.MAIN_LIGHT,
   },
   avatar: {
     position: "absolute",

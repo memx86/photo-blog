@@ -1,5 +1,7 @@
 import { StyleSheet, View, Image } from "react-native";
 
+import COLORS from "../assets/constants/COLORS";
+
 const CameraIcon = () => {
   return (
     <View style={s.cameraImageWrapper}>
@@ -18,7 +20,7 @@ const s = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 30,
-    backgroundColor: "#ffffff",
+    backgroundColor: COLORS.MAIN_LIGHT,
   },
   cameraImage: {
     width: 24,

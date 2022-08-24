@@ -24,6 +24,7 @@ import Comment from "../../../components/Comment";
 import useHideParentBottomBar from "../../../assets/hooks/useHideParentBottomBar";
 import useIsKeyboardShown from "../../../assets/hooks/useIsKeyboardShown";
 import DB_KEYS from "../../../assets/constants/DB_KEYS";
+import COLORS from "../../../assets/constants/COLORS";
 
 const CommentsScreen = ({ parentNavigation }) => {
   const { width } = useWindowDimensions();
@@ -118,7 +119,7 @@ const CommentsScreen = ({ parentNavigation }) => {
             <TextInput
               style={s.input}
               placeholder="Комментировать"
-              placeholderTextColor="#BDBDBD"
+              placeholderTextColor={COLORS.GREY}
               onChangeText={setComment}
               value={comment}
             />
@@ -127,7 +128,7 @@ const CommentsScreen = ({ parentNavigation }) => {
               style={s.icon}
               onPress={onAddComment}
             >
-              <Feather name="arrow-up" size={14} color="#ffffff" />
+              <Feather name="arrow-up" size={14} color={COLORS.MAIN_LIGHT} />
             </TouchableOpacity>
           </View>
         </View>
@@ -140,7 +141,7 @@ const s = StyleSheet.create({
     paddingTop: 32,
     position: "relative",
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: COLORS.MAIN_LIGHT,
   },
   imageWrapper: {
     marginBottom: 32,
@@ -162,13 +163,13 @@ const s = StyleSheet.create({
   input: {
     padding: 16,
     borderWidth: 1,
-    borderColor: "#E8E8E8",
+    borderColor: COLORS.THIRD_GREY,
     borderRadius: 100,
-    backgroundColor: "#F6F6F6",
+    backgroundColor: COLORS.SECONDARY_GREY,
     fontFamily: "Roboto-Medium",
     fontSize: 16,
     lineHeight: 19,
-    color: "#212121",
+    color: COLORS.MAIN_DARK,
   },
   icon: {
     position: "absolute",
@@ -177,7 +178,7 @@ const s = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: "#FF6C00",
+    backgroundColor: COLORS.ACCENT,
     justifyContent: "center",
     alignItems: "center",
   },

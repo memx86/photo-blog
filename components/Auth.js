@@ -10,11 +10,14 @@ import {
   TouchableOpacity,
   Keyboard,
   TouchableWithoutFeedback,
+  useWindowDimensions,
 } from "react-native";
 import { useDispatch } from "react-redux";
 
 import useIsKeyboardShown from "../assets/hooks/useIsKeyboardShown";
 import { loginUser, registerUser } from "../redux/auth";
+
+import COLORS from "../assets/constants/COLORS";
 
 export const TYPES = {
   REGISTER: "REGISTER",
@@ -50,6 +53,7 @@ const reducer = (state, { type, payload }) => {
 
 const Auth = ({ type = TYPES.REGISTER, navigation }) => {
   const [state, localDispatch] = useReducer(reducer, initialState);
+  const { width } = useWindowDimensions();
   const dispatch = useDispatch();
   const isKeyboardShown = useIsKeyboardShown(false);
   const { name, email, password } = state;
@@ -105,7 +109,7 @@ const Auth = ({ type = TYPES.REGISTER, navigation }) => {
                 }),
               }}
             >
-              <View style={s.formWrapper}>
+              <View style={{ ...s.formWrapper, width: width - 16 * 2 }}>
                 <Text style={s.title}>
                   {isRegister ? "Регистрация" : "Логин"}
                 </Text>
@@ -113,7 +117,7 @@ const Auth = ({ type = TYPES.REGISTER, navigation }) => {
                   <TextInput
                     style={s.input}
                     placeholder="Логин"
-                    placeholderTextColor="#BDBDBD"
+                    placeholderTextColor={COLORS.GREY}
                     onChangeText={onNameChange}
                     value={name}
                   />
@@ -121,7 +125,7 @@ const Auth = ({ type = TYPES.REGISTER, navigation }) => {
                 <TextInput
                   style={s.input}
                   placeholder="Адрес электронной почты"
-                  placeholderTextColor="#BDBDBD"
+                  placeholderTextColor={COLORS.GREY}
                   onChangeText={onEmailChange}
                   value={email}
                 />
@@ -130,7 +134,7 @@ const Auth = ({ type = TYPES.REGISTER, navigation }) => {
                   secureTextEntry={true}
                   textContentType="newPassword"
                   placeholder="Пароль"
-                  placeholderTextColor="#BDBDBD"
+                  placeholderTextColor={COLORS.GREY}
                   onChangeText={onPasswordChange}
                   value={password}
                 />
@@ -177,14 +181,13 @@ const s = StyleSheet.create({
   },
   form: {
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.MAIN_LIGHT,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
   },
   formWrapper: {
     marginHorizontal: 16,
     paddingBottom: 45,
-    width: "100%",
     maxWidth: 400,
     alignItems: "center",
   },
@@ -200,9 +203,9 @@ const s = StyleSheet.create({
     height: 50,
     width: "100%",
     borderWidth: 1,
-    borderColor: "#E8E8E8",
+    borderColor: COLORS.THIRD_GREY,
     borderRadius: 8,
-    backgroundColor: "#F6F6F6",
+    backgroundColor: COLORS.SECONDARY_GREY,
     fontFamily: "Roboto",
     fontSize: 16,
   },
@@ -215,12 +218,12 @@ const s = StyleSheet.create({
     borderWidth: 1,
     borderColor: "transparent",
     borderRadius: 100,
-    backgroundColor: "#FF6C00",
+    backgroundColor: COLORS.ACCENT,
   },
   btnText: {
     fontFamily: "Roboto",
     fontSize: 16,
-    color: "#FFFFFF",
+    color: COLORS.MAIN_LIGHT,
   },
   linkWrapper: {
     marginTop: 16,
@@ -229,7 +232,7 @@ const s = StyleSheet.create({
   text: {
     fontFamily: "Roboto",
     fontSize: 16,
-    color: "#1B4371",
+    color: COLORS.SECONDARY_ACCENT,
   },
   link: {
     marginLeft: 8,
