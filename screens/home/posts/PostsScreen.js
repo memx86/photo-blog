@@ -1,11 +1,7 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { StyleSheet, ScrollView } from "react-native";
 import { useSelector } from "react-redux";
-import {
-  useRoute,
-  useNavigation,
-  useNavigationState,
-} from "@react-navigation/native";
+import { useNavigation, useNavigationState } from "@react-navigation/native";
 
 import db from "../../../firebase";
 

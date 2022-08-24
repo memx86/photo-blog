@@ -74,6 +74,7 @@ const ProfileScreen = ({ navigation }) => {
 const s = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: COLORS.MAIN_LIGHT,
   },
   image: {
     flex: 1,
