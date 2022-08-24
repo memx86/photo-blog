@@ -1,4 +1,4 @@
-import { initializeApp } from "firebase/app";
+import firebase from "firebase";
 
 // web app's Firebase configuration
 const firebaseConfig = {
@@ -11,6 +11,6 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const db = initializeApp(firebaseConfig);
+const db = firebase.initializeApp(firebaseConfig);
 
 export default db;

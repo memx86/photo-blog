@@ -1,6 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useDispatch } from "react-redux";
 import { Feather } from "@expo/vector-icons";
+
+import { logoutUser } from "../../redux/auth";
 
 import PostsScreen from "./posts/PostsScreen";
 import CommentsScreen from "./posts/CommentsScreen";
@@ -11,9 +14,12 @@ import useHeaderStyle from "../../assets/hooks/useHeaderStyle";
 
 const PostsStack = createNativeStackNavigator();
 
-const PostsNavigator = ({ onLogout, onGoBack }) => {
+const PostsNavigator = ({ onGoBack }) => {
   const headerStyle = useHeaderStyle();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const onLogout = () => dispatch(logoutUser());
 
   return (
     <PostsStack.Navigator screenOptions={{ ...headerStyle }}>

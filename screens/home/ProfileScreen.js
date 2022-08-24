@@ -8,19 +8,22 @@ import {
   Text,
   useWindowDimensions,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import { Feather } from "@expo/vector-icons";
 
-import AuthContext from "../../assets/context/AuthContext";
+import { getUser, logoutUser } from "../../redux/auth";
+
 import IconButton from "../../components/IconButton";
 import PostsList from "../../components/PostsList";
 import { TYPES } from "../../components/Post";
 
 const ProfileScreen = ({ navigation }) => {
-  const { setIsAuth, user } = useContext(AuthContext);
+  const user = useSelector(getUser);
   const { width } = useWindowDimensions();
+  const dispatch = useDispatch();
   const { avatarURL, name } = user;
 
-  const onLogout = () => setIsAuth(false);
+  const onLogout = () => dispatch(logoutUser());
 
   // test posts
   const posts = [

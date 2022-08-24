@@ -1,12 +1,14 @@
 import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { StyleSheet, ScrollView } from "react-native";
+import { useSelector } from "react-redux";
 import {
   useRoute,
   useNavigation,
   useNavigationState,
 } from "@react-navigation/native";
 
-import AuthContext from "../../../assets/context/AuthContext";
+import { getUser } from "../../../redux/auth";
+
 import UserCard from "../../../components/UserCard";
 import PostsList from "../../../components/PostsList";
 
@@ -105,7 +107,7 @@ const mockPosts = [
 ];
 
 const PostsScreen = ({ parentNavigation }) => {
-  const { user } = useContext(AuthContext);
+  const user = useSelector(getUser);
   const [posts, setPosts] = useState(mockPosts);
   const route = useRoute();
   const navigation = useNavigation();

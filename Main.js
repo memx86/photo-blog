@@ -2,26 +2,43 @@ import {
   NavigationContainer,
   useNavigationContainerRef,
 } from "@react-navigation/native";
-import { useContext } from "react";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import db from "./firebase";
 
-import { getIsAuth } from "./redux/auth";
-import AuthContext from "./assets/context/AuthContext";
+import { changeUser, resetAuth, authorized } from "./redux/auth";
 
 import Navigator from "./screens/Navigator";
 
 const Main = () => {
   const navigationRef = useNavigationContainerRef();
-  const isAuth = useSelector(getIsAuth);
-  const { setIsAuth } = useContext(AuthContext);
+  const dispatch = useDispatch();
+
+  const onChangeUser = (user) => {
+    if (!user) {
+      dispatch(resetAuth());
+      return;
+    }
+
+    const { uid, displayName, email, photoURL } = user;
+    const changedUser = {
+      id: uid,
+      name: displayName,
+      email,
+      avatarURL: photoURL,
+    };
+
+    dispatch(changeUser(changedUser));
+    dispatch(authorized());
+  };
+
+  useEffect(() => {
+    db.auth().onAuthStateChanged((user) => onChangeUser(user));
+  }, []);
 
   return (
     <NavigationContainer ref={navigationRef}>
-      <Navigator
-        isAuth={isAuth}
-        navigationRef={navigationRef}
-        setIsAuth={setIsAuth}
-      />
+      <Navigator navigationRef={navigationRef} />
     </NavigationContainer>
   );
 };

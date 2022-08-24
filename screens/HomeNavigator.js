@@ -13,7 +13,7 @@ import useHeaderStyle from "../assets/hooks/useHeaderStyle";
 
 const Main = createBottomTabNavigator();
 
-const HomeNavigator = ({ onLogout, onGoBack }) => {
+const HomeNavigator = ({ onGoBack }) => {
   const headerStyle = useHeaderStyle();
   return (
     <Main.Navigator
@@ -49,7 +49,7 @@ const HomeNavigator = ({ onLogout, onGoBack }) => {
           ),
         }}
       >
-        {() => <PostsNavigator onLogout={onLogout} onGoBack={onGoBack} />}
+        {() => <PostsNavigator onGoBack={onGoBack} />}
       </Main.Screen>
       <Main.Screen
         name="CreatePosts"

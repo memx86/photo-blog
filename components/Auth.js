@@ -11,9 +11,10 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
+import { useDispatch } from "react-redux";
 
-import AuthContext from "../assets/context/AuthContext";
 import useIsKeyboardShown from "../assets/hooks/useIsKeyboardShown";
+import { loginUser, registerUser } from "../redux/auth";
 
 export const TYPES = {
   REGISTER: "REGISTER",
@@ -21,12 +22,12 @@ export const TYPES = {
 };
 
 const initialState = {
-  login: "",
+  name: "",
   email: "",
   password: "",
 };
 const ACTION_TYPES = {
-  SET_LOGIN: "SET_LOGIN",
+  SET_NAME: "SET_NAME",
   SET_EMAIL: "SET_EMAIL",
   SET_PASSWORD: "SET_PASSWORD",
   RESET: "RESET",
@@ -34,8 +35,8 @@ const ACTION_TYPES = {
 
 const reducer = (state, { type, payload }) => {
   switch (type) {
-    case ACTION_TYPES.SET_LOGIN:
-      return { ...state, login: payload };
+    case ACTION_TYPES.SET_NAME:
+      return { ...state, name: payload };
     case ACTION_TYPES.SET_EMAIL:
       return { ...state, email: payload };
     case ACTION_TYPES.SET_PASSWORD:
@@ -48,31 +49,28 @@ const reducer = (state, { type, payload }) => {
 };
 
 const Auth = ({ type = TYPES.REGISTER, navigation }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { setIsAuth } = useContext(AuthContext);
+  const [state, localDispatch] = useReducer(reducer, initialState);
+  const dispatch = useDispatch();
   const isKeyboardShown = useIsKeyboardShown(false);
-  const { login, email, password } = state;
+  const { name, email, password } = state;
 
-  const onLoginChange = (value) =>
-    dispatch({ type: ACTION_TYPES.SET_LOGIN, payload: value });
+  const onNameChange = (value) =>
+    localDispatch({ type: ACTION_TYPES.SET_NAME, payload: value });
 
   const onEmailChange = (value) =>
-    dispatch({ type: ACTION_TYPES.SET_EMAIL, payload: value });
+    localDispatch({ type: ACTION_TYPES.SET_EMAIL, payload: value });
 
   const onPasswordChange = (value) =>
-    dispatch({ type: ACTION_TYPES.SET_PASSWORD, payload: value });
+    localDispatch({ type: ACTION_TYPES.SET_PASSWORD, payload: value });
 
   const closeKeyboard = () => Keyboard.dismiss();
 
   const onRegister = () => {
-    console.log("login:", login);
-    console.log("email:", email);
-    console.log("password:", password);
+    dispatch(registerUser({ name, email, password }));
   };
 
   const onLogin = () => {
-    console.log("email:", email);
-    console.log("password:", password);
+    dispatch(loginUser({ email, password }));
   };
 
   const isRegister = type === TYPES.REGISTER;
@@ -82,8 +80,7 @@ const Auth = ({ type = TYPES.REGISTER, navigation }) => {
   const onBtnPress = () => {
     onSubmit();
     closeKeyboard();
-    dispatch({ type: ACTION_TYPES.RESET });
-    setIsAuth(true);
+    localDispatch({ type: ACTION_TYPES.RESET });
   };
 
   const onLinkPress = () =>
@@ -117,8 +114,8 @@ const Auth = ({ type = TYPES.REGISTER, navigation }) => {
                     style={s.input}
                     placeholder="Логин"
                     placeholderTextColor="#BDBDBD"
-                    onChangeText={onLoginChange}
-                    value={login}
+                    onChangeText={onNameChange}
+                    value={name}
                   />
                 )}
                 <TextInput

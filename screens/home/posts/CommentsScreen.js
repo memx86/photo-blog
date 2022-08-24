@@ -12,11 +12,13 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 import { Feather } from "@expo/vector-icons";
+
+import { getUser } from "../../../redux/auth";
 
 import Comment from "../../../components/Comment";
 
-import AuthContext from "../../../assets/context/AuthContext";
 import useHideParentBottomBar from "../../../assets/hooks/useHideParentBottomBar";
 import useIsKeyboardShown from "../../../assets/hooks/useIsKeyboardShown";
 
@@ -25,7 +27,7 @@ const CommentsScreen = ({ parentNavigation }) => {
   const route = useRoute();
   const post = route.params.post;
   const { imageURL, comments: initialComments, owner } = post;
-  const { user } = useContext(AuthContext);
+  const user = useSelector(getUser);
 
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState(initialComments);
