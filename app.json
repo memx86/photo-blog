@@ -2,7 +2,9 @@
   "expo": {
     "name": "photo-blog",
     "slug": "photo-blog",
+    "owner": "memx86",
     "version": "1.0.0",
+    "sdkVersion": "46.0.0",
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,16 +18,23 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.memx86.photoblog"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.memx86.photoblog"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f091c52c-e1f2-44d5-b99f-c842edf84020"
+      }
     }
   }
 }
