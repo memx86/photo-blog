@@ -33,8 +33,10 @@ const ProfileScreen = ({ navigation }) => {
       .firestore()
       .collection(DB_KEYS.POSTS)
       .where("owner", "==", user.id)
-      .onSnapshot((data) =>
-        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      .onSnapshot(
+        (data) =>
+          setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))),
+        () => postsSubscription()
       );
 
     return () => postsSubscription();

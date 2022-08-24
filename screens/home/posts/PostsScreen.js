@@ -28,13 +28,15 @@ const PostsScreen = ({ parentNavigation }) => {
   }, [routes]);
 
   useEffect(() => {
-    const postsListener = db
+    const postsSubscription = db
       .firestore()
       .collection(DB_KEYS.POSTS)
-      .onSnapshot((data) =>
-        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      .onSnapshot(
+        (data) =>
+          setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))),
+        () => postsSubscription()
       );
-    () => postsListener();
+    () => postsSubscription();
   }, []);
 
   return (

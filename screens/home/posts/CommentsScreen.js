@@ -43,8 +43,10 @@ const CommentsScreen = ({ parentNavigation }) => {
       .collection(DB_KEYS.POSTS)
       .doc(postId)
       .collection(DB_KEYS.COMMENTS)
-      .onSnapshot((data) =>
-        setComments(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      .onSnapshot(
+        (data) =>
+          setComments(data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))),
+        () => commentsSubscription()
       );
     return () => commentsSubscription();
   }, []);
