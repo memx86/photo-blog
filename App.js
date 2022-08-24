@@ -1,16 +1,14 @@
 import { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
-import {
-  NavigationContainer,
-  useNavigationContainerRef,
-} from "@react-navigation/native";
+import { Provider } from "react-redux";
 
-import Navigator from "./screens/Navigator";
+import { store } from "./redux/store";
 
 import AuthContext from "./assets/context/AuthContext";
 
 import users from "./users";
+import Main from "./Main";
 
 export default function App() {
   const [isAuth, setIsAuth] = useState(false);
@@ -19,7 +17,6 @@ export default function App() {
     "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
     "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
   });
-  const navigationRef = useNavigationContainerRef();
 
   if (!fontsLoaded)
     return (
@@ -29,15 +26,11 @@ export default function App() {
     );
 
   return (
-    <AuthContext.Provider value={{ setIsAuth, user: users[1] }}>
-      <NavigationContainer ref={navigationRef}>
-        <Navigator
-          isAuth={isAuth}
-          navigationRef={navigationRef}
-          setIsAuth={setIsAuth}
-        />
-      </NavigationContainer>
-    </AuthContext.Provider>
+    <Provider store={store}>
+      <AuthContext.Provider value={{ setIsAuth, user: users[1] }}>
+        <Main />
+      </AuthContext.Provider>
+    </Provider>
   );
 }
 
