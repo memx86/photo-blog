@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import randomAvatar from "random-avatar";
 import db from "../../firebase";
 
 export const registerUser = createAsyncThunk(
@@ -6,13 +7,19 @@ export const registerUser = createAsyncThunk(
   async ({ name, email, password }, { rejectWithValue }) => {
     try {
       await db.auth().createUserWithEmailAndPassword(email, password);
-      const user = await db.auth().currentUser;
+      const user = db.auth().currentUser;
+      const avatar = randomAvatar({
+        email,
+        protocol: "https",
+        extension: "jpg",
+      });
 
       await user.updateProfile({
         displayName: name,
+        photoURL: avatar,
       });
 
-      const { uid, displayName, photoURL } = await db.auth().currentUser;
+      const { uid, displayName, photoURL } = db.auth().currentUser;
 
       return { id: uid, name: displayName, email, avatarURL: photoURL };
     } catch (error) {
