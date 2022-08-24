@@ -7,12 +7,9 @@ import {
 } from "react-native";
 import dayjs from "dayjs";
 
-import getUserAvatar from "../services/getUserAvatar";
-
 const Comment = ({ style = {}, comment, isLeft }) => {
   const { width } = useWindowDimensions();
-  const { text, time, owner } = comment;
-  const avatarURL = getUserAvatar(owner);
+  const { text, time, avatarURL } = comment;
 
   return (
     <View

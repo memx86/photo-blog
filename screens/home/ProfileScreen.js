@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useEffect, useState } from "react";
 import {
   StyleSheet,
   ScrollView,
@@ -11,45 +11,36 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Feather } from "@expo/vector-icons";
 
+import db from "../../firebase";
+
 import { getUser, logoutUser } from "../../redux/auth";
 
 import IconButton from "../../components/IconButton";
 import PostsList from "../../components/PostsList";
 import { TYPES } from "../../components/Post";
 
+import DB_KEYS from "../../assets/constants/DB_KEYS";
+
 const ProfileScreen = ({ navigation }) => {
   const user = useSelector(getUser);
   const { width } = useWindowDimensions();
   const dispatch = useDispatch();
+  const [posts, setPosts] = useState([]);
   const { avatarURL, name } = user;
 
-  const onLogout = () => dispatch(logoutUser());
+  useEffect(() => {
+    const postsSubscription = db
+      .firestore()
+      .collection(DB_KEYS.POSTS)
+      .where("owner", "==", user.id)
+      .onSnapshot((data) =>
+        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      );
 
-  // test posts
-  const posts = [
-    {
-      id: "2",
-      imageURL:
-        "https://s2.reutersmedia.net/resources/r/?m=02&d=20220420&t=2&i=1597571295&w=780&fh=&fw=&ll=&pl=&sq=&r=2022-04-20T202111Z_18429_MRPRC2C6T9OLXEP_RTRMADP_0_UKRAINE-CRISIS-KYIV-DEFENCE",
-      title: "Test 2",
-      comments: [],
-      locationName: "Test region 2, test country 2",
-      location: {},
-      owner: "UserId 2",
-      likes: 10,
-    },
-    {
-      id: "3",
-      imageURL:
-        "https://s3.reutersmedia.net/resources/r/?m=02&d=20220420&t=2&i=1597571288&w=780&fh=&fw=&ll=&pl=&sq=&r=2022-04-20T202111Z_18429_MRPRC22BT93OGNO_RTRMADP_0_UKRAINE-CRISIS-KYIV-REGION",
-      title: "Test 3",
-      comments: [{}, {}, {}, {}],
-      locationName: "Test region 3, test country 3",
-      location: {},
-      owner: "UserId 2",
-      likes: 123,
-    },
-  ];
+    return () => postsSubscription();
+  }, []);
+
+  const onLogout = () => dispatch(logoutUser());
 
   return (
     <ScrollView style={s.container}>

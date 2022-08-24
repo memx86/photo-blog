@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -15,24 +15,39 @@ import { useRoute } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { Feather } from "@expo/vector-icons";
 
+import db from "../../../firebase";
+
 import { getUser } from "../../../redux/auth";
 
 import Comment from "../../../components/Comment";
 
 import useHideParentBottomBar from "../../../assets/hooks/useHideParentBottomBar";
 import useIsKeyboardShown from "../../../assets/hooks/useIsKeyboardShown";
+import DB_KEYS from "../../../assets/constants/DB_KEYS";
 
 const CommentsScreen = ({ parentNavigation }) => {
   const { width } = useWindowDimensions();
   const route = useRoute();
   const post = route.params.post;
-  const { imageURL, comments: initialComments, owner } = post;
+  const { imageURL, owner, id: postId } = post;
   const user = useSelector(getUser);
 
   const [comment, setComment] = useState("");
-  const [comments, setComments] = useState(initialComments);
+  const [comments, setComments] = useState([]);
 
   const isKeyboardShown = useIsKeyboardShown(false);
+
+  useEffect(() => {
+    const commentsSubscription = db
+      .firestore()
+      .collection(DB_KEYS.POSTS)
+      .doc(postId)
+      .collection(DB_KEYS.COMMENTS)
+      .onSnapshot((data) =>
+        setComments(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      );
+    return () => commentsSubscription();
+  }, []);
 
   useHideParentBottomBar({
     route,
@@ -40,14 +55,20 @@ const CommentsScreen = ({ parentNavigation }) => {
     name: "Comments",
   });
 
-  const onAddComment = () => {
+  const onAddComment = async () => {
     const newComment = {
-      id: Date.now(),
       owner: user.id,
       text: comment,
       time: Date.now(),
+      avatarURL: user.avatarURL,
     };
-    setComments([...comments, newComment]);
+
+    await db
+      .firestore()
+      .collection(DB_KEYS.POSTS)
+      .doc(postId)
+      .collection(DB_KEYS.COMMENTS)
+      .add(newComment);
     setComment("");
     Keyboard.dismiss();
   };

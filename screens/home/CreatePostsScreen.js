@@ -13,13 +13,20 @@ import {
   useWindowDimensions,
   ImageBackground,
 } from "react-native";
+import { useSelector } from "react-redux";
 import { Camera } from "expo-camera";
 import * as Location from "expo-location";
 import { Feather } from "@expo/vector-icons";
 
+import db from "../../firebase";
+
+import { getUser } from "../../redux/auth";
+
 import CameraIcon from "../../components/CameraIcon";
 
 import useIsKeyboardShown from "../../assets/hooks/useIsKeyboardShown";
+import uploadImage from "../../services/uploadImage";
+import DB_KEYS from "../../assets/constants/DB_KEYS";
 
 const ACTION_TYPES = {
   SET_IS_CAMERA_ACTIVE: "SET_IS_CAMERA_ACTIVE",
@@ -69,6 +76,8 @@ const CreatePostsScreen = ({ navigation }) => {
     Camera.useCameraPermissions();
   const [locationPermission, requestLocationPermission] =
     Location.useForegroundPermissions();
+
+  const user = useSelector(getUser);
 
   const imageStyle = {
     width: width - 16 * 2,
@@ -125,19 +134,23 @@ const CreatePostsScreen = ({ navigation }) => {
   const onLocationNameChange = (value) =>
     dispatch({ type: ACTION_TYPES.SET_LOCATION_NAME, payload: value });
 
-  const onSubmitPost = () => {
-    const id = Date.now();
-    const userId = "UserId 2";
+  const onSubmitPost = async () => {
+    const imageURL = await uploadImage({
+      uri: photo,
+      target: DB_KEYS.POST_IMAGES,
+    });
+    const userId = user.id;
     const post = {
-      id,
-      imageURL: photo,
+      imageURL,
       title,
       locationName,
       location,
       owner: userId,
+      likes: 0,
     };
-    navigation.navigate("Posts", { post });
+    await db.firestore().collection(DB_KEYS.POSTS).add(post);
     dispatch({ type: ACTION_TYPES.RESET });
+    navigation.navigate("Posts");
   };
 
   return (

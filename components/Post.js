@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -8,15 +9,32 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
+import db from "../firebase";
+import DB_KEYS from "../assets/constants/DB_KEYS";
+
 export const TYPES = {
   PROFILE: "PROFILE",
   POSTS: "POSTS",
 };
 
 const Post = ({ post, style = {}, type, navigation }) => {
-  const { imageURL, title, comments, locationName, location, likes } = post;
+  const { id: postId, imageURL, title, locationName, location, likes } = post;
   const { width } = useWindowDimensions();
   const isPosts = type === TYPES.POSTS;
+
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    const commentsSubscription = db
+      .firestore()
+      .collection(DB_KEYS.POSTS)
+      .doc(postId)
+      .collection(DB_KEYS.COMMENTS)
+      .onSnapshot((data) =>
+        setComments(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      );
+    return () => commentsSubscription();
+  }, []);
 
   const onCommentsPress = () => navigation.navigate("Comments", { post });
   const onMapPress = () =>
