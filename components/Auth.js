@@ -17,6 +17,8 @@ import { useDispatch } from "react-redux";
 import useIsKeyboardShown from "../assets/hooks/useIsKeyboardShown";
 import { loginUser, registerUser } from "../redux/auth";
 
+import AvatarPicker from "./AvatarPicker";
+
 import COLORS from "../assets/constants/COLORS";
 
 export const TYPES = {
@@ -25,11 +27,13 @@ export const TYPES = {
 };
 
 const initialState = {
+  image: "",
   name: "",
   email: "",
   password: "",
 };
 const ACTION_TYPES = {
+  SET_IMAGE: "SET_IMAGE",
   SET_NAME: "SET_NAME",
   SET_EMAIL: "SET_EMAIL",
   SET_PASSWORD: "SET_PASSWORD",
@@ -38,6 +42,8 @@ const ACTION_TYPES = {
 
 const reducer = (state, { type, payload }) => {
   switch (type) {
+    case ACTION_TYPES.SET_IMAGE:
+      return { ...state, image: payload };
     case ACTION_TYPES.SET_NAME:
       return { ...state, name: payload };
     case ACTION_TYPES.SET_EMAIL:
@@ -56,21 +62,24 @@ const Auth = ({ type = TYPES.REGISTER, navigation }) => {
   const { width } = useWindowDimensions();
   const dispatch = useDispatch();
   const isKeyboardShown = useIsKeyboardShown(false);
-  const { name, email, password } = state;
+  const { image, name, email, password } = state;
 
-  const onNameChange = (value) =>
-    localDispatch({ type: ACTION_TYPES.SET_NAME, payload: value });
+  const setImage = (image) =>
+    localDispatch({ type: ACTION_TYPES.SET_IMAGE, payload: image });
 
-  const onEmailChange = (value) =>
-    localDispatch({ type: ACTION_TYPES.SET_EMAIL, payload: value });
+  const onNameChange = (name) =>
+    localDispatch({ type: ACTION_TYPES.SET_NAME, payload: name });
 
-  const onPasswordChange = (value) =>
-    localDispatch({ type: ACTION_TYPES.SET_PASSWORD, payload: value });
+  const onEmailChange = (email) =>
+    localDispatch({ type: ACTION_TYPES.SET_EMAIL, payload: email });
+
+  const onPasswordChange = (password) =>
+    localDispatch({ type: ACTION_TYPES.SET_PASSWORD, payload: password });
 
   const closeKeyboard = () => Keyboard.dismiss();
 
   const onRegister = () => {
-    dispatch(registerUser({ name, email, password }));
+    dispatch(registerUser({ name, email, password, image }));
   };
 
   const onLogin = () => {
@@ -110,6 +119,13 @@ const Auth = ({ type = TYPES.REGISTER, navigation }) => {
               }}
             >
               <View style={{ ...s.formWrapper, width: width - 16 * 2 }}>
+                {isRegister && (
+                  <AvatarPicker
+                    style={s.avatar}
+                    image={image}
+                    setImage={setImage}
+                  />
+                )}
                 <Text style={s.title}>
                   {isRegister ? "Регистрация" : "Логин"}
                 </Text>
@@ -186,10 +202,17 @@ const s = StyleSheet.create({
     borderTopRightRadius: 25,
   },
   formWrapper: {
+    position: "relative",
     marginHorizontal: 16,
     paddingBottom: 45,
     maxWidth: 400,
     alignItems: "center",
+  },
+  avatar: {
+    position: "absolute",
+    top: -60,
+    left: "50%",
+    transform: [{ translateX: -60 }],
   },
   title: {
     marginTop: 92,
