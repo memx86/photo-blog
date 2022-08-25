@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { registerUser } from "./authThunks";
+import { registerUser, loginUser, logoutUser } from "./authThunks";
 
 const initialState = {
   isAuth: false,
@@ -8,6 +8,10 @@ const initialState = {
     avatarURL: "",
     name: "",
     email: "",
+  },
+  loading: {
+    isLoading: false,
+    message: "",
   },
 };
 
@@ -25,12 +29,43 @@ const authSlice = createSlice({
     resetAuth: () => initialState,
   },
   extraReducers: {
-    [registerUser.pending]: (state, { payload }) => {},
+    [registerUser.pending]: (state) => ({
+      ...state,
+      loading: { isLoading: true, message: "Signing up" },
+    }),
     [registerUser.fulfilled]: (state, { payload }) => ({
       ...state,
       user: payload,
+      loading: initialState.loading,
     }),
-    [registerUser.rejected]: (state, { payload }) => {},
+    [registerUser.rejected]: (state) => ({
+      ...state,
+      loading: initialState.loading,
+    }),
+    [loginUser.pending]: (state) => ({
+      ...state,
+      loading: { isLoading: true, message: "Signing in" },
+    }),
+    [loginUser.fulfilled]: (state) => ({
+      ...state,
+      loading: initialState.loading,
+    }),
+    [loginUser.rejected]: (state) => ({
+      ...state,
+      loading: initialState.loading,
+    }),
+    [logoutUser.pending]: (state) => ({
+      ...state,
+      loading: { isLoading: true, message: "Exiting" },
+    }),
+    [logoutUser.fulfilled]: (state) => ({
+      ...state,
+      loading: initialState.loading,
+    }),
+    [logoutUser.rejected]: (state) => ({
+      ...state,
+      loading: initialState.loading,
+    }),
   },
 });
 

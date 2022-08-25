@@ -6,7 +6,11 @@ const Loader = ({ style = {}, text = "", icon = true }) => {
   return (
     <View style={{ ...s.loader, ...style }}>
       {icon && <ActivityIndicator size="large" color={COLORS.ACCENT} />}
-      <Text style={{ ...s.loaderText, marginTop: icon ? 16 : 0 }}>{text}</Text>
+      <View>
+        <Text style={{ ...s.loaderText, marginTop: icon ? 16 : 0 }}>
+          {text}
+        </Text>
+      </View>
     </View>
   );
 };

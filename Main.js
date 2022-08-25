@@ -3,16 +3,25 @@ import {
   useNavigationContainerRef,
 } from "@react-navigation/native";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "./components/Loader";
 import db from "./firebase";
 
-import { changeUser, resetAuth, authorized } from "./redux/auth";
+import {
+  changeUser,
+  resetAuth,
+  authorized,
+  getIsLoading,
+  getLoadingMessage,
+} from "./redux/auth";
 
 import Navigator from "./screens/Navigator";
 
 const Main = () => {
   const navigationRef = useNavigationContainerRef();
   const dispatch = useDispatch();
+  const isLoading = useSelector(getIsLoading);
+  const message = useSelector(getLoadingMessage);
 
   const onChangeUser = (user) => {
     if (!user) {
@@ -35,6 +44,8 @@ const Main = () => {
   useEffect(() => {
     db.auth().onAuthStateChanged((user) => onChangeUser(user));
   }, []);
+
+  if (isLoading) return <Loader text={message} />;
 
   return (
     <NavigationContainer ref={navigationRef}>

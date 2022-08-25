@@ -22,6 +22,7 @@ import db from "../../firebase";
 
 import { getUser } from "../../redux/auth";
 
+import Loader from "../../components/Loader";
 import CameraIcon from "../../components/CameraIcon";
 
 import useIsKeyboardShown from "../../assets/hooks/useIsKeyboardShown";
@@ -35,6 +36,7 @@ const ACTION_TYPES = {
   SET_TITLE: "SET_TITLE",
   SET_LOCATION_NAME: "SET_LOCATION_NAME",
   SET_LOCATION: "SET_LOCATION",
+  SET_IS_LOADING: "SET_IS_LOADING",
   RESET: "RESET",
 };
 
@@ -47,6 +49,7 @@ const initialState = {
     latitude: null,
     longitude: null,
   },
+  isLoading: false,
 };
 
 const reducer = (state, { type, payload }) => {
@@ -61,6 +64,8 @@ const reducer = (state, { type, payload }) => {
       return { ...state, locationName: payload };
     case ACTION_TYPES.SET_LOCATION:
       return { ...state, location: payload };
+    case ACTION_TYPES.SET_IS_LOADING:
+      return { ...state, isLoading: payload };
     case ACTION_TYPES.RESET:
       return { ...initialState };
     default:
@@ -87,7 +92,8 @@ const CreatePostsScreen = ({ navigation }) => {
     alignItems: "center",
   };
 
-  const { isCameraActive, photo, title, locationName, location } = state;
+  const { isCameraActive, photo, title, locationName, location, isLoading } =
+    state;
 
   const isValidData =
     !!photo &&
@@ -103,6 +109,9 @@ const CreatePostsScreen = ({ navigation }) => {
   const closeCamera = () =>
     dispatch({ type: ACTION_TYPES.SET_IS_CAMERA_ACTIVE, payload: false });
 
+  const setIsLoading = (payload) =>
+    dispatch({ type: ACTION_TYPES.SET_IS_LOADING, payload });
+
   const makePicture = async () => {
     try {
       if (!cameraPermission.granted) {
@@ -111,8 +120,8 @@ const CreatePostsScreen = ({ navigation }) => {
       if (!locationPermission.granted) {
         await requestLocationPermission();
       }
-
       const { uri } = await camera.takePictureAsync();
+      setIsLoading(true);
       const { coords } = await Location.getCurrentPositionAsync();
       const { latitude, longitude } = coords;
 
@@ -124,6 +133,7 @@ const CreatePostsScreen = ({ navigation }) => {
         type: ACTION_TYPES.SET_LOCATION,
         payload: { latitude, longitude },
       });
+      setIsLoading(false);
       closeCamera();
     } catch (error) {
       closeCamera();
@@ -136,6 +146,7 @@ const CreatePostsScreen = ({ navigation }) => {
     dispatch({ type: ACTION_TYPES.SET_LOCATION_NAME, payload: value });
 
   const onSubmitPost = async () => {
+    setIsLoading(true);
     const imageURL = await uploadImage({
       uri: photo,
       target: DB_KEYS.POST_IMAGES,
@@ -154,6 +165,9 @@ const CreatePostsScreen = ({ navigation }) => {
     navigation.navigate("Posts");
   };
 
+  if (!isCameraActive && isLoading)
+    return <Loader text="Sending post to server" />;
+
   return (
     <TouchableWithoutFeedback onPress={closeKeyboard}>
       <KeyboardAvoidingView
@@ -165,13 +179,19 @@ const CreatePostsScreen = ({ navigation }) => {
           scrollEnabled={isKeyboardShown ? true : false}
         >
           <View style={{ marginBottom: isKeyboardShown ? 150 : 0 }}>
-            {isCameraActive && (
-              <Camera style={imageStyle} ref={setCamera}>
-                <TouchableOpacity activeOpacity={0.7} onPress={makePicture}>
-                  <CameraIcon />
-                </TouchableOpacity>
-              </Camera>
-            )}
+            {isCameraActive &&
+              (isLoading ? (
+                <Loader
+                  style={{ ...imageStyle, ...s.cameraLoader }}
+                  text="Saving Image..."
+                />
+              ) : (
+                <Camera style={imageStyle} ref={setCamera}>
+                  <TouchableOpacity activeOpacity={0.7} onPress={makePicture}>
+                    <CameraIcon />
+                  </TouchableOpacity>
+                </Camera>
+              ))}
             {!isCameraActive && (
               <TouchableOpacity activeOpacity={0.7} onPress={openCamera}>
                 {!photo && (
@@ -245,6 +265,9 @@ const s = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     backgroundColor: COLORS.MAIN_LIGHT,
+  },
+  cameraLoader: {
+    flex: 0,
   },
   imageWrapper: {
     backgroundColor: COLORS.THIRD_GREY,

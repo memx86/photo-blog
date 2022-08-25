@@ -25,6 +25,7 @@ import useHideParentBottomBar from "../../../assets/hooks/useHideParentBottomBar
 import useIsKeyboardShown from "../../../assets/hooks/useIsKeyboardShown";
 import DB_KEYS from "../../../assets/constants/DB_KEYS";
 import COLORS from "../../../assets/constants/COLORS";
+import Loader from "../../../components/Loader";
 
 const CommentsScreen = ({ parentNavigation }) => {
   const { width } = useWindowDimensions();
@@ -35,6 +36,7 @@ const CommentsScreen = ({ parentNavigation }) => {
 
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const isKeyboardShown = useIsKeyboardShown(false);
 
@@ -65,7 +67,7 @@ const CommentsScreen = ({ parentNavigation }) => {
       time: Date.now(),
       avatarURL: user.avatarURL,
     };
-
+    setIsLoading(true);
     await db
       .firestore()
       .collection(DB_KEYS.POSTS)
@@ -73,8 +75,11 @@ const CommentsScreen = ({ parentNavigation }) => {
       .collection(DB_KEYS.COMMENTS)
       .add(newComment);
     setComment("");
+    setIsLoading(false);
     Keyboard.dismiss();
   };
+
+  if (isLoading) return <Loader text="Sending comment" />;
 
   return (
     <KeyboardAvoidingView
