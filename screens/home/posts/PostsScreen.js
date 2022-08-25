@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from "react";
-import { StyleSheet, ScrollView } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useNavigation, useNavigationState } from "@react-navigation/native";
 
@@ -37,10 +37,10 @@ const PostsScreen = ({ parentNavigation }) => {
   }, []);
 
   return (
-    <ScrollView style={s.container}>
+    <View style={s.container}>
       <UserCard user={user} style={s.userCard} />
       <PostsList posts={posts} navigation={navigation} />
-    </ScrollView>
+    </View>
   );
 };
 

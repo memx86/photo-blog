@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import {
   StyleSheet,
-  ScrollView,
   View,
   ImageBackground,
   Image,
@@ -46,7 +45,7 @@ const ProfileScreen = ({ navigation }) => {
   const onLogout = () => dispatch(logoutUser());
 
   return (
-    <ScrollView style={s.container}>
+    <View style={s.container}>
       <ImageBackground
         source={require("../../assets/images/PhotoBG.jpg")}
         style={s.image}
@@ -67,7 +66,7 @@ const ProfileScreen = ({ navigation }) => {
           />
         </View>
       </ImageBackground>
-    </ScrollView>
+    </View>
   );
 };
 
