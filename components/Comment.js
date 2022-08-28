@@ -9,9 +9,9 @@ import dayjs from "dayjs";
 
 import COLORS from "../assets/constants/COLORS";
 
-const Comment = ({ style = {}, comment, isLeft }) => {
+const Comment = ({ style = {}, comment, isLeft, avatarURL }) => {
   const { width } = useWindowDimensions();
-  const { text, time, avatarURL } = comment;
+  const { text, time } = comment;
 
   return (
     <View

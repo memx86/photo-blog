@@ -36,6 +36,7 @@ const CommentsScreen = ({ parentNavigation }) => {
 
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
+  const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const isKeyboardShown = useIsKeyboardShown(false);
@@ -54,6 +55,15 @@ const CommentsScreen = ({ parentNavigation }) => {
     return () => commentsSubscription();
   }, []);
 
+  useEffect(() => {
+    const usersSubscription = db
+      .firestore()
+      .collection(DB_KEYS.USERS)
+      .onSnapshot((data) => setUsers(data.docs.map((doc) => doc.data())));
+
+    return () => usersSubscription();
+  }, []);
+
   useHideParentBottomBar({
     route,
     navigation: parentNavigation,
@@ -65,7 +75,6 @@ const CommentsScreen = ({ parentNavigation }) => {
       owner: user.id,
       text: comment,
       time: Date.now(),
-      avatarURL: user.avatarURL,
     };
     setIsLoading(true);
     await db
@@ -78,6 +87,8 @@ const CommentsScreen = ({ parentNavigation }) => {
     setIsLoading(false);
     Keyboard.dismiss();
   };
+
+  const getAvatar = (uid) => users.find((user) => user?.uid === uid)?.avatarURL;
 
   if (isLoading) return <Loader text="Sending comment" />;
 
@@ -113,6 +124,7 @@ const CommentsScreen = ({ parentNavigation }) => {
                   comment={item}
                   style={s.item}
                   ownerId={owner}
+                  avatarURL={getAvatar(item.owner)}
                   isLeft={isLeft}
                 />
               );

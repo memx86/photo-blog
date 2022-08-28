@@ -26,7 +26,7 @@ export const registerUser = createAsyncThunk(
       await db
         .firestore()
         .collection(DB_KEYS.USERS)
-        .add({ uid, avatarURL, name });
+        .add({ uid, avatarURL, name: name.toLowerCase() });
 
       return { id: uid, name: displayName, email, avatarURL: photoURL };
     } catch (error) {
