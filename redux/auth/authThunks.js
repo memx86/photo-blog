@@ -23,21 +23,25 @@ export const registerUser = createAsyncThunk(
       });
 
       const { uid, displayName, photoURL } = db.auth().currentUser;
+      await db
+        .firestore()
+        .collection(DB_KEYS.USERS)
+        .add({ uid, avatarURL, name });
 
       return { id: uid, name: displayName, email, avatarURL: photoURL };
     } catch (error) {
-      console.log("error", error);
+      return rejectWithValue(error.code);
     }
   }
 );
 
 export const loginUser = createAsyncThunk(
   "user/login",
-  async ({ email, password }) => {
+  async ({ email, password }, { rejectWithValue }) => {
     try {
       await db.auth().signInWithEmailAndPassword(email, password);
     } catch (error) {
-      console.log("error", error);
+      return rejectWithValue(error.code);
     }
   }
 );
@@ -46,6 +50,6 @@ export const logoutUser = createAsyncThunk("user/logout", async () => {
   try {
     await db.auth().signOut();
   } catch (error) {
-    console.log("error", error);
+    console.log(error);
   }
 });

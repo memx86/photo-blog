@@ -13,6 +13,10 @@ const initialState = {
     isLoading: false,
     message: "",
   },
+  error: {
+    isError: false,
+    code: "",
+  },
 };
 
 const authSlice = createSlice({
@@ -32,31 +36,42 @@ const authSlice = createSlice({
     [registerUser.pending]: (state) => ({
       ...state,
       loading: { isLoading: true, message: "Signing up" },
+      error: initialState.error,
     }),
     [registerUser.fulfilled]: (state, { payload }) => ({
       ...state,
       user: payload,
       loading: initialState.loading,
     }),
-    [registerUser.rejected]: (state) => ({
+    [registerUser.rejected]: (state, { payload }) => ({
       ...state,
       loading: initialState.loading,
+      error: {
+        isError: true,
+        code: payload,
+      },
     }),
     [loginUser.pending]: (state) => ({
       ...state,
       loading: { isLoading: true, message: "Signing in" },
+      error: initialState.error,
     }),
     [loginUser.fulfilled]: (state) => ({
       ...state,
       loading: initialState.loading,
     }),
-    [loginUser.rejected]: (state) => ({
+    [loginUser.rejected]: (state, { payload }) => ({
       ...state,
       loading: initialState.loading,
+      error: {
+        isError: true,
+        code: payload,
+      },
     }),
     [logoutUser.pending]: (state) => ({
       ...state,
       loading: { isLoading: true, message: "Exiting" },
+      error: initialState.error,
     }),
     [logoutUser.fulfilled]: (state) => ({
       ...state,

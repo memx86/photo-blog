@@ -12,14 +12,21 @@ import {
   TouchableWithoutFeedback,
   useWindowDimensions,
 } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import useIsKeyboardShown from "../assets/hooks/useIsKeyboardShown";
-import { loginUser, registerUser } from "../redux/auth";
+import {
+  getErrorCode,
+  getIsError,
+  loginUser,
+  registerUser,
+} from "../redux/auth";
 
 import AvatarPicker from "./AvatarPicker";
 
 import COLORS from "../assets/constants/COLORS";
+import useGetAuthErrorMessage from "../services/useGetAuthErrorMessage";
+import ErrorMessage from "./ErrorMessage";
 
 export const TYPES = {
   REGISTER: "REGISTER",
@@ -62,6 +69,8 @@ const Auth = ({ type = TYPES.REGISTER, navigation }) => {
   const { width } = useWindowDimensions();
   const dispatch = useDispatch();
   const isKeyboardShown = useIsKeyboardShown(false);
+  const isError = useSelector(getIsError);
+  const errorMessage = useGetAuthErrorMessage();
   const { image, name, email, password } = state;
 
   const setImage = (image) =>
@@ -154,6 +163,9 @@ const Auth = ({ type = TYPES.REGISTER, navigation }) => {
                   onChangeText={onPasswordChange}
                   value={password}
                 />
+                {isError && (
+                  <ErrorMessage style={s.error} message={errorMessage} />
+                )}
                 <TouchableOpacity
                   style={s.btn}
                   activeOpacity={0.7}
@@ -232,6 +244,7 @@ const s = StyleSheet.create({
     fontFamily: "Roboto",
     fontSize: 16,
   },
+  error: { marginTop: 16 },
   btn: {
     marginTop: 43,
     height: 51,

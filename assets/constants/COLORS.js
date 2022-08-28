@@ -6,5 +6,6 @@ const COLORS = {
   MAIN_DARK: "#212121",
   ACCENT: "#FF6C00",
   SECONDARY_ACCENT: "#1B4371",
+  ERROR: "#ff0000",
 };
 export default COLORS;
