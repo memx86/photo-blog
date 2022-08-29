@@ -158,6 +158,7 @@ const CreatePostsScreen = ({ navigation }) => {
       locationName,
       location,
       owner: userId,
+      comments: [],
       likes: 0,
     };
     await db.firestore().collection(DB_KEYS.POSTS).add(post);

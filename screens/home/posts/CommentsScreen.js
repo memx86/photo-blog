@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -27,29 +27,67 @@ import DB_KEYS from "../../../assets/constants/DB_KEYS";
 import COLORS from "../../../assets/constants/COLORS";
 import Loader from "../../../components/Loader";
 
+const ACTION_TYPES = {
+  SET_COMMENT: "SET_COMMENT",
+  SET_COMMENTS: "SET_COMMENTS",
+  SET_USERS: "SET_USERS",
+  SET_IS_LOADING: "SET_IS_LOADING",
+};
+
+const initialState = {
+  comment: "",
+  comments: [],
+  users: [],
+  isLoading: false,
+};
+
+const reducer = (state, { type, payload }) => {
+  switch (type) {
+    case ACTION_TYPES.SET_COMMENT:
+      return { ...state, comment: payload };
+    case ACTION_TYPES.SET_COMMENTS:
+      return { ...state, comments: payload };
+    case ACTION_TYPES.SET_USERS:
+      return { ...state, users: payload };
+    case ACTION_TYPES.SET_IS_LOADING:
+      return { ...state, isLoading: payload };
+    default:
+      return state;
+  }
+};
+
 const CommentsScreen = ({ parentNavigation }) => {
   const { width } = useWindowDimensions();
   const route = useRoute();
   const post = route.params.post;
-  const { imageURL, owner, id: postId } = post;
+  const { id: postId, owner, imageURL } = post;
   const user = useSelector(getUser);
 
-  const [comment, setComment] = useState("");
-  const [comments, setComments] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-
+  const [state, dispatch] = useReducer(reducer, initialState);
   const isKeyboardShown = useIsKeyboardShown(false);
+
+  const { comment, comments, users, isLoading } = state;
+
+  const setComment = (comment) =>
+    dispatch({ type: ACTION_TYPES.SET_COMMENT, payload: comment });
+  const setComments = (comments) =>
+    dispatch({ type: ACTION_TYPES.SET_COMMENTS, payload: comments });
+  const setUsers = (users) =>
+    dispatch({ type: ACTION_TYPES.SET_USERS, payload: users });
+  const setIsLoading = (isLoading) =>
+    dispatch({ type: ACTION_TYPES.SET_IS_LOADING, payload: isLoading });
 
   useEffect(() => {
     const commentsSubscription = db
       .firestore()
-      .collection(DB_KEYS.POSTS)
-      .doc(postId)
       .collection(DB_KEYS.COMMENTS)
       .onSnapshot(
         (data) =>
-          setComments(data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))),
+          setComments(
+            data.docs
+              .filter((doc) => doc.data()?.postId === postId)
+              .map((doc) => ({ ...doc.data(), id: doc.id }))
+          ),
         () => commentsSubscription()
       );
     return () => commentsSubscription();
@@ -73,16 +111,22 @@ const CommentsScreen = ({ parentNavigation }) => {
   const onAddComment = async () => {
     const newComment = {
       owner: user.id,
+      postId,
       text: comment,
       time: Date.now(),
     };
     setIsLoading(true);
+    const createdComment = await db
+      .firestore()
+      .collection(DB_KEYS.COMMENTS)
+      .add(newComment);
     await db
       .firestore()
       .collection(DB_KEYS.POSTS)
       .doc(postId)
-      .collection(DB_KEYS.COMMENTS)
-      .add(newComment);
+      .update({
+        comments: [...comments.map((comment) => comment.id), createdComment.id],
+      });
     setComment("");
     setIsLoading(false);
     Keyboard.dismiss();

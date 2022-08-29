@@ -9,8 +9,6 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
-import db from "../firebase";
-import DB_KEYS from "../assets/constants/DB_KEYS";
 import COLORS from "../assets/constants/COLORS";
 
 export const TYPES = {
@@ -19,25 +17,9 @@ export const TYPES = {
 };
 
 const Post = ({ post, style = {}, type, navigation }) => {
-  const { id: postId, imageURL, title, locationName, location, likes } = post;
+  const { imageURL, title, locationName, location, comments, likes } = post;
   const { width } = useWindowDimensions();
   const isPosts = type === TYPES.POSTS;
-
-  const [comments, setComments] = useState([]);
-
-  useEffect(() => {
-    const commentsSubscription = db
-      .firestore()
-      .collection(DB_KEYS.POSTS)
-      .doc(postId)
-      .collection(DB_KEYS.COMMENTS)
-      .onSnapshot(
-        (data) =>
-          setComments(data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))),
-        () => commentsSubscription()
-      );
-    return () => commentsSubscription();
-  }, []);
 
   const onCommentsPress = () => navigation.navigate("Comments", { post });
   const onMapPress = () =>
